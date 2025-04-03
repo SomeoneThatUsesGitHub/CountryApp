@@ -142,7 +142,7 @@ const CountryPage: React.FC = () => {
         {activeTab === 'political-system' && (
           <div>
             <h2 className="text-2xl font-bold mb-8">Political System</h2>
-            <GovernmentSystem countryId={country.id} />
+            <GovernmentSystem countryId={country.id} countryName={country.name} />
             <div className="mt-8">
               <InternationalRelations countryName={country.name} countryId={country.id} />
             </div>

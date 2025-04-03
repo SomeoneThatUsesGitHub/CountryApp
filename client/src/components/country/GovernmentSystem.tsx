@@ -12,9 +12,10 @@ import InternationalOrganizations from './InternationalOrganizations';
 
 interface GovernmentSystemProps {
   countryId: number;
+  countryName?: string;
 }
 
-const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId }) => {
+const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId, countryName = "this country" }) => {
   // Fetch political leaders for the country
   const { 
     data: leaders = [], 
@@ -316,20 +317,18 @@ const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId }) => {
       )}
       
       {/* International Organizations Section */}
-      {Array.isArray(organizationsData) && organizationsData.length > 0 && (
-        <div className="mt-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">International Organizations</h2>
-          </div>
-          
-          <Separator className="my-4" />
-          
-          <InternationalOrganizations 
-            organizations={organizationsData} 
-            countryName="this country" 
-          />
+      <div className="mt-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">International Organizations</h2>
         </div>
-      )}
+        
+        <Separator className="my-4" />
+        
+        <InternationalOrganizations 
+          organizations={organizationsData} 
+          countryName={countryName} 
+        />
+      </div>
     </div>
   );
 };
