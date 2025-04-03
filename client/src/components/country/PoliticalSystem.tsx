@@ -165,10 +165,17 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
       </div>
       
       {/* International Organizations Section */}
-      <InternationalOrganizations 
-        countryName={countryName} 
-        organizations={organizationsData}
-      />
+      <motion.div 
+        className="mb-12 bg-white p-6 rounded-lg shadow-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        <InternationalOrganizations 
+          countryName={countryName} 
+          organizations={organizationsData}
+        />
+      </motion.div>
       
       {/* International Relations Section */}
       <InternationalRelations countryName={countryName} countryId={countryId} />
