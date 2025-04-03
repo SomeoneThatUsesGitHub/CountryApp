@@ -576,10 +576,15 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
               )}
             </div>
           </DialogHeader>
-          <div className="p-2 max-h-[60vh] overflow-y-auto">
-            <DialogDescription className="text-md whitespace-pre-line">
-              {selectedConflict?.description}
-            </DialogDescription>
+          <div className="p-4 max-h-[60vh] overflow-y-auto">
+            {selectedConflict?.description ? (
+              <div 
+                className="rich-text-content text-md" 
+                dangerouslySetInnerHTML={{ __html: selectedConflict.description }} 
+              />
+            ) : (
+              <p className="text-gray-500">No description available</p>
+            )}
           </div>
           <div className="flex justify-end">
             <Button 
