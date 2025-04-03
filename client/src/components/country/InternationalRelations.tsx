@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { InternationalRelation, PoliticalSystem } from '@shared/schema';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { AlertTriangle, Shield, Crosshair, Briefcase, DollarSign, Swords, Globe, CircleHelp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface InternationalRelationsProps {
   countryName: string;
@@ -82,10 +91,93 @@ function getCountryCode(countryName: string): string {
   return countryCodeMap[countryName] || 'xx'; // Return 'xx' as fallback for unknown countries
 }
 
+// Define an interface for conflict structure
+interface Conflict {
+  name: string;
+  type: string;
+  status: string;
+  year?: number;
+  description?: string;
+}
+
 const InternationalRelations: React.FC<InternationalRelationsProps> = ({ 
   countryName, 
   countryId
 }) => {
+  // For conflict details dialog
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedConflict, setSelectedConflict] = useState<Conflict | null>(null);
+  
+  // Function to get conflict type icon and color
+  const getConflictTypeStyle = (type: string) => {
+    switch (type) {
+      case 'Territorial':
+        return { 
+          icon: <Crosshair className="h-4 w-4 mr-1" />, 
+          color: 'bg-red-100 text-red-800 border-red-300'
+        };
+      case 'Ethnic':
+        return { 
+          icon: <AlertTriangle className="h-4 w-4 mr-1" />, 
+          color: 'bg-amber-100 text-amber-800 border-amber-300'
+        };
+      case 'Religious':
+        return { 
+          icon: <Shield className="h-4 w-4 mr-1" />, 
+          color: 'bg-purple-100 text-purple-800 border-purple-300'
+        };
+      case 'Political':
+        return { 
+          icon: <Briefcase className="h-4 w-4 mr-1" />, 
+          color: 'bg-blue-100 text-blue-800 border-blue-300'
+        };
+      case 'Economic':
+        return { 
+          icon: <DollarSign className="h-4 w-4 mr-1" />, 
+          color: 'bg-green-100 text-green-800 border-green-300'
+        };
+      case 'Civil War':
+        return { 
+          icon: <Swords className="h-4 w-4 mr-1" />, 
+          color: 'bg-rose-100 text-rose-800 border-rose-300'
+        };
+      case 'Diplomatic':
+        return { 
+          icon: <Globe className="h-4 w-4 mr-1" />, 
+          color: 'bg-indigo-100 text-indigo-800 border-indigo-300'
+        };
+      case 'Other':
+        return { 
+          icon: <CircleHelp className="h-4 w-4 mr-1" />, 
+          color: 'bg-cyan-100 text-cyan-800 border-cyan-300'
+        };
+      default:
+        return { 
+          icon: <CircleHelp className="h-4 w-4 mr-1" />, 
+          color: 'bg-gray-100 text-gray-800 border-gray-300'
+        };
+    }
+  };
+  
+  // Function to get conflict status style
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'Active':
+        return 'bg-red-100 text-red-800 border-red-300';
+      case 'Frozen':
+        return 'bg-blue-100 text-blue-800 border-blue-300';
+      case 'Dormant':
+        return 'bg-gray-100 text-gray-800 border-gray-300';
+      case 'Resolved':
+        return 'bg-green-100 text-green-800 border-green-300';
+      case 'Escalating':
+        return 'bg-rose-100 text-rose-800 border-rose-300';
+      case 'Peace Process':
+        return 'bg-teal-100 text-teal-800 border-teal-300';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
   // Custom query function that handles 404 responses properly
   const customQueryFn = async () => {
     try {
@@ -396,30 +488,49 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
             
             <div className="p-3 sm:p-6">
               {politicalSystem?.ongoingConflicts && Array.isArray(politicalSystem.ongoingConflicts) && politicalSystem.ongoingConflicts.length > 0 ? (
-                <div className="space-y-3">
-                  <ul className="space-y-3">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {politicalSystem.ongoingConflicts.map((conflict, index) => (
-                      <li key={index} className="border-l-4 border-red-500 pl-3 py-2">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <div>
-                            <h4 className="font-medium text-sm sm:text-base">{conflict.name}</h4>
-                            <p className="text-xs sm:text-sm text-gray-600">{conflict.type}</p>
-                          </div>
-                          <div className="flex items-center">
-                            <Badge variant={conflict.status === 'Active' ? 'destructive' : 'outline'} className="text-xs">
-                              {conflict.status}
-                            </Badge>
+                      <Card key={index} className="border border-gray-200">
+                        <div className="p-3 sm:p-4">
+                          <div className="mb-2">
+                            <h4 className="text-md font-bold">{conflict.name}</h4>
                             {conflict.year && (
-                              <span className="text-xs text-gray-500 ml-2">Since {conflict.year}</span>
+                              <p className="text-xs text-gray-500">Started: {conflict.year}</p>
                             )}
                           </div>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            <Badge 
+                              variant="outline" 
+                              className={cn("flex items-center", getConflictTypeStyle(conflict.type).color)}
+                            >
+                              {getConflictTypeStyle(conflict.type).icon}
+                              {conflict.type}
+                            </Badge>
+                            <Badge 
+                              variant="outline" 
+                              className={cn("flex items-center", getStatusStyle(conflict.status))}
+                            >
+                              {conflict.status}
+                            </Badge>
+                          </div>
+                          {conflict.description && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="px-0 text-sm font-medium text-blue-600 hover:text-blue-800"
+                              onClick={() => {
+                                setSelectedConflict(conflict);
+                                setIsDialogOpen(true);
+                              }}
+                            >
+                              Read More
+                            </Button>
+                          )}
                         </div>
-                        {conflict.description && (
-                          <p className="mt-1 text-xs sm:text-sm text-gray-700">{conflict.description}</p>
-                        )}
-                      </li>
+                      </Card>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-center py-4 sm:py-8">
@@ -436,6 +547,50 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
           </CardContent>
         </Card>
       </motion.div>
+      
+      {/* Dialog for conflict description */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">
+              {selectedConflict?.name}
+              {selectedConflict?.year && <span className="text-sm font-normal ml-2 text-gray-500">Started: {selectedConflict.year}</span>}
+            </DialogTitle>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {selectedConflict && (
+                <>
+                  <Badge 
+                    variant="outline" 
+                    className={cn("flex items-center", getConflictTypeStyle(selectedConflict.type).color)}
+                  >
+                    {getConflictTypeStyle(selectedConflict.type).icon}
+                    {selectedConflict.type}
+                  </Badge>
+                  <Badge 
+                    variant="outline" 
+                    className={cn("flex items-center", getStatusStyle(selectedConflict.status))}
+                  >
+                    {selectedConflict.status}
+                  </Badge>
+                </>
+              )}
+            </div>
+          </DialogHeader>
+          <div className="p-2 max-h-[60vh] overflow-y-auto">
+            <DialogDescription className="text-md whitespace-pre-line">
+              {selectedConflict?.description}
+            </DialogDescription>
+          </div>
+          <div className="flex justify-end">
+            <Button 
+              variant="secondary" 
+              onClick={() => setIsDialogOpen(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
