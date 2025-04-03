@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
 import InternationalRelations from './InternationalRelations';
 import RecentLaws from './RecentLaws';
-import { PoliticalSystem as PoliticalSystemType } from '@shared/schema';
 
 interface PoliticalSystemProps {
   countryName: string;
@@ -18,20 +16,6 @@ interface PoliticalSystemProps {
 }
 
 const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryId = 0, leader }) => {
-  const [politicalSystemData, setPoliticalSystemData] = useState<PoliticalSystemType | null>(null);
-  
-  // Fetch political system data
-  const { data: politicalSystem } = useQuery({
-    queryKey: [`/api/countries/${countryId}/political-system`],
-    enabled: countryId > 0,
-  });
-
-  useEffect(() => {
-    if (politicalSystem) {
-      setPoliticalSystemData(politicalSystem);
-    }
-  }, [politicalSystem]);
-
   // Default leader info if none provided
   const leaderInfo = leader || {
     name: 'Current Leader',
@@ -45,10 +29,8 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
     ? new Date(leaderInfo.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : 'Current';
 
-  // Government structure branches from data or defaults
-  const governmentBranchesData = politicalSystemData?.governmentBranches as any[] || [];
-  
-  const governmentBranches = governmentBranchesData.length > 0 ? governmentBranchesData : [
+  // Government structure branches
+  const governmentBranches = [
     {
       title: 'Executive',
       icon: 'fa-user',
@@ -69,11 +51,8 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
     }
   ];
 
-  // Political ideologies from data or defaults
-  const ideologiesData = politicalSystemData?.democraticPrinciples as string[] || [];
-  const ideologies = ideologiesData.length > 0 ? ideologiesData : ['Democracy', 'Federalism', 'Secularism', 'Multi-party System'];
-
-  console.log('Political System Data:', politicalSystemData);
+  // Political ideologies
+  const ideologies = ['Democracy', 'Federalism', 'Secularism', 'Multi-party System'];
 
   return (
     <div>
@@ -161,8 +140,6 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
           </p>
         </motion.div>
       </div>
-      
-      {/* International Organizations Section removed as it's handled by GovernmentSystem.tsx */}
       
       {/* International Relations Section */}
       <InternationalRelations countryName={countryName} countryId={countryId} />

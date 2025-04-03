@@ -33,7 +33,6 @@ import PartiesEditor from '@/components/admin/PartiesEditor';
 import RelationsEditor from '@/components/admin/RelationsEditor';
 import FreedomIndexEditor from '@/components/admin/FreedomIndexEditor';
 import ConflictsEditor from '@/components/admin/ConflictsEditor';
-import OrganizationsEditor from '@/components/admin/OrganizationsEditor';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -80,12 +79,6 @@ const AdminPage: React.FC = () => {
   // Fetch the selected country details
   const { data: selectedCountry, isLoading: countryLoading } = useQuery<Country>({
     queryKey: [`/api/countries/${selectedCountryId}`],
-    enabled: selectedCountryId !== null,
-  });
-  
-  // Fetch political system data for the selected country
-  const { data: politicalSystem } = useQuery<PoliticalSystem>({
-    queryKey: [`/api/countries/${selectedCountryId}/political-system`],
     enabled: selectedCountryId !== null,
   });
   
@@ -474,20 +467,6 @@ const AdminPage: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <ConflictsEditor countryId={selectedCountry.id} />
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>International Organizations</CardTitle>
-                      <CardDescription>Add international organizations the country is a member of</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <OrganizationsEditor 
-                        countryId={selectedCountry.id} 
-                        politicalSystemId={politicalSystem?.id || null}
-                        initialOrganizations={politicalSystem?.organizations as any[] || []}
-                      />
                     </CardContent>
                   </Card>
                 </div>
