@@ -137,17 +137,22 @@ const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId, countryN
   // Find ruling party
   const rulingParty = parties.find(party => party.isRuling);
 
-  // Get international organizations data from political system
-  const rawOrganizations = politicalSystem?.organizations;
+  // Get international organizations data from political system - with better logging
+  console.log('Political System Data FULL:', JSON.stringify(politicalSystem));
+  
+  const rawOrganizations = politicalSystem?.organizations || [];
+  console.log('Raw Organizations Data Type:', typeof rawOrganizations);
+  console.log('Raw Organizations Data isArray:', Array.isArray(rawOrganizations));
+  console.log('Raw Organizations Data:', JSON.stringify(rawOrganizations));
+  
+  // Ensure organizations are in the expected format
   const organizationsData = Array.isArray(rawOrganizations) 
     ? rawOrganizations 
     : typeof rawOrganizations === 'string' && rawOrganizations
       ? JSON.parse(rawOrganizations)
       : [];
-  
-  console.log('Political System Data:', politicalSystem);
-  console.log('Raw Organizations Data:', rawOrganizations);
-  console.log('Parsed Organizations Data:', organizationsData);
+      
+  console.log('Final Organizations Data:', JSON.stringify(organizationsData));
 
   return (
     <div className="space-y-12 pb-8">

@@ -14,7 +14,7 @@ interface Organization {
 }
 
 interface InternationalOrganizationsProps {
-  organizations?: Organization[];
+  organizations?: Organization[] | null | any;
   countryName: string;
 }
 
@@ -22,10 +22,15 @@ const InternationalOrganizations: React.FC<InternationalOrganizationsProps> = ({
   organizations = [], 
   countryName 
 }) => {
-  // Sort organizations by name
-  const sortedOrganizations = [...organizations].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
+  console.log('InternationalOrganizations component received:', organizations);
+  
+  // Ensure organizations is an array before sorting (type safety)
+  const organizationsArray = Array.isArray(organizations) ? organizations : [];
+  
+  // Sort organizations by name (only if there are any)
+  const sortedOrganizations = organizationsArray.length > 0 
+    ? [...organizationsArray].sort((a, b) => a.name.localeCompare(b.name))
+    : [];
 
   // Function to get role badge style
   const getRoleStyle = (role?: string) => {
