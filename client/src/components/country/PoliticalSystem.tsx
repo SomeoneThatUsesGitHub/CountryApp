@@ -76,6 +76,8 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
 
   // International organizations data
   const organizationsData = politicalSystemData?.organizations as any[] || [];
+  console.log('Political System Data:', politicalSystemData);
+  console.log('Organizations Data:', organizationsData);
 
   return (
     <div>
