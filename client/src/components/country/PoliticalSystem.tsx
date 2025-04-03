@@ -75,9 +75,16 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
   const ideologies = ideologiesData.length > 0 ? ideologiesData : ['Democracy', 'Federalism', 'Secularism', 'Multi-party System'];
 
   // International organizations data
-  const organizationsData = politicalSystemData?.organizations as any[] || [];
+  const rawOrganizations = politicalSystemData?.organizations;
+  const organizationsData = Array.isArray(rawOrganizations) 
+    ? rawOrganizations 
+    : typeof rawOrganizations === 'string' && rawOrganizations
+      ? JSON.parse(rawOrganizations)
+      : [];
+  
   console.log('Political System Data:', politicalSystemData);
-  console.log('Organizations Data:', organizationsData);
+  console.log('Raw Organizations:', rawOrganizations);
+  console.log('Parsed Organizations Data:', organizationsData);
 
   return (
     <div>
