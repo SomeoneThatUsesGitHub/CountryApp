@@ -62,10 +62,12 @@ const Header: React.FC = () => {
           </a>
           <a 
             href="#" 
-            className="font-medium text-gray-600 hover:text-primary transition-colors"
+            className={`font-medium hover:text-primary transition-colors ${
+              location === '/about' ? 'text-primary' : 'text-gray-600'
+            }`}
             onClick={(e) => {
               e.preventDefault();
-              // TODO: Implement About page
+              handleNavigation('/about');
             }}
           >
             About
@@ -130,10 +132,12 @@ const Header: React.FC = () => {
             </a>
             <a 
               href="#" 
-              className="py-3 font-medium text-gray-600 hover:text-primary transition-colors"
+              className={`py-3 font-medium hover:text-primary transition-colors ${
+                location === '/about' ? 'text-primary' : 'text-gray-600'
+              }`}
               onClick={(e) => {
                 e.preventDefault();
-                // TODO: Implement About page
+                handleNavigation('/about');
               }}
             >
               About
