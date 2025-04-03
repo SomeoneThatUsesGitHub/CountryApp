@@ -55,6 +55,8 @@ import {
   CircleHelp 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 // Interface for the component props
 interface ConflictsEditorProps {
@@ -436,17 +438,29 @@ const ConflictsEditor: React.FC<ConflictsEditorProps> = ({ countryId }) => {
                 control={form.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col space-y-2">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Provide a brief description of the conflict"
-                        className="min-h-[100px] resize-y"
-                        {...field}
-                      />
+                      <div className="min-h-[200px]">
+                        <ReactQuill
+                          theme="snow"
+                          value={field.value}
+                          onChange={field.onChange}
+                          modules={{
+                            toolbar: [
+                              ['bold', 'italic', 'underline', 'strike'],
+                              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                              ['blockquote', 'link'],
+                              [{ 'header': 1 }, { 'header': 2 }],
+                              [{ 'color': [] }, { 'background': [] }]
+                            ]
+                          }}
+                          className="h-40"
+                        />
+                      </div>
                     </FormControl>
                     <FormDescription>
-                      Briefly describe the nature and context of the conflict (optional)
+                      Use formatting tools to make the content more engaging. You can add bold, italic, lists, and more.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -657,17 +671,29 @@ const ConflictsEditor: React.FC<ConflictsEditorProps> = ({ countryId }) => {
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col space-y-2">
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Provide a brief description of the conflict"
-                      className="min-h-[100px] resize-y"
-                      {...field}
-                    />
+                    <div className="min-h-[200px]">
+                      <ReactQuill
+                        theme="snow"
+                        value={field.value}
+                        onChange={field.onChange}
+                        modules={{
+                          toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            ['blockquote', 'link'],
+                            [{ 'header': 1 }, { 'header': 2 }],
+                            [{ 'color': [] }, { 'background': [] }]
+                          ]
+                        }}
+                        className="h-40"
+                      />
+                    </div>
                   </FormControl>
                   <FormDescription>
-                    Briefly describe the nature and context of the conflict (optional)
+                    Use formatting tools to make the content more engaging. You can add bold, italic, lists, and more.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -731,8 +757,15 @@ const ConflictsEditor: React.FC<ConflictsEditorProps> = ({ countryId }) => {
             </div>
           </DialogHeader>
           <div className="p-2 max-h-[60vh] overflow-y-auto">
-            <DialogDescription className="text-md whitespace-pre-line">
-              {selectedConflict?.description}
+            <DialogDescription>
+              {selectedConflict?.description ? (
+                <div 
+                  className="rich-text-content" 
+                  dangerouslySetInnerHTML={{ __html: selectedConflict.description }} 
+                />
+              ) : (
+                <p className="text-gray-500">No description available</p>
+              )}
             </DialogDescription>
           </div>
           <div className="flex justify-end">
