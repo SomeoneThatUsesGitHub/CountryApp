@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 import { PoliticalLeader, PoliticalParty, PoliticalSystem } from '@shared/schema';
+import InternationalOrganizations from './InternationalOrganizations';
 
 interface GovernmentSystemProps {
   countryId: number;
@@ -134,6 +135,18 @@ const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId }) => {
   
   // Find ruling party
   const rulingParty = parties.find(party => party.isRuling);
+
+  // Get international organizations data from political system
+  const rawOrganizations = politicalSystem?.organizations;
+  const organizationsData = Array.isArray(rawOrganizations) 
+    ? rawOrganizations 
+    : typeof rawOrganizations === 'string' && rawOrganizations
+      ? JSON.parse(rawOrganizations)
+      : [];
+  
+  console.log('Political System Data:', politicalSystem);
+  console.log('Raw Organizations Data:', rawOrganizations);
+  console.log('Parsed Organizations Data:', organizationsData);
 
   return (
     <div className="space-y-12 pb-8">
@@ -299,6 +312,22 @@ const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId }) => {
               ))}
             </div>
           </div>
+        </div>
+      )}
+      
+      {/* International Organizations Section */}
+      {Array.isArray(organizationsData) && organizationsData.length > 0 && (
+        <div className="mt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold">International Organizations</h2>
+          </div>
+          
+          <Separator className="my-4" />
+          
+          <InternationalOrganizations 
+            organizations={organizationsData} 
+            countryName="this country" 
+          />
         </div>
       )}
     </div>
