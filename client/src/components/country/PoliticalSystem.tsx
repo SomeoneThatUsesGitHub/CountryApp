@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import InternationalRelations from './InternationalRelations';
 import RecentLaws from './RecentLaws';
-import InternationalOrganizations from './InternationalOrganizations';
 import { PoliticalSystem as PoliticalSystemType } from '@shared/schema';
 
 interface PoliticalSystemProps {
@@ -74,17 +73,7 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
   const ideologiesData = politicalSystemData?.democraticPrinciples as string[] || [];
   const ideologies = ideologiesData.length > 0 ? ideologiesData : ['Democracy', 'Federalism', 'Secularism', 'Multi-party System'];
 
-  // International organizations data
-  const rawOrganizations = politicalSystemData?.organizations;
-  const organizationsData = Array.isArray(rawOrganizations) 
-    ? rawOrganizations 
-    : typeof rawOrganizations === 'string' && rawOrganizations
-      ? JSON.parse(rawOrganizations)
-      : [];
-  
   console.log('Political System Data:', politicalSystemData);
-  console.log('Raw Organizations:', rawOrganizations);
-  console.log('Parsed Organizations Data:', organizationsData);
 
   return (
     <div>
@@ -173,11 +162,7 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
         </motion.div>
       </div>
       
-      {/* International Organizations Section */}
-      <InternationalOrganizations 
-        countryName={countryName} 
-        organizations={organizationsData}
-      />
+      {/* International Organizations Section removed as it's handled by GovernmentSystem.tsx */}
       
       {/* International Relations Section */}
       <InternationalRelations countryName={countryName} countryId={countryId} />
