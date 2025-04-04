@@ -178,153 +178,212 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Countries Carousel Section - Original Content */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary-light/20 to-primary/10">
-        <div className="container mx-auto max-w-4xl">
+      {/* Interactive Globe Section - Original Content */}
+      <section className="py-16 px-4 bg-gradient-to-br from-primary-light/20 to-primary/10 overflow-hidden">
+        <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Explore <span className="text-primary">Countries</span>
+              Explore the <span className="text-primary">World</span>
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Découvrez des pays fascinants du monde entier
+              Discover how politics shapes our global community
             </p>
           </motion.div>
           
-          <div className="relative overflow-hidden py-10">
-            {/* Main Carousel */}
-            <div className="carousel-container relative">
-              <div className="carousel-track flex">
-                {/* This would normally be fetched from the API, but for demo using hardcoded examples */}
-                <motion.div 
-                  className="carousel-wrapper"
-                  animate={{ x: ["0%", "-100%"] }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    duration: 30,
-                    ease: "linear"
-                  }}
-                >
-                  <div className="flex gap-6">
-                    {[
-                      { 
-                        name: "France", 
-                        flag: "FR", 
-                        color: "bg-blue-500",
-                        capital: "Paris",
-                        continent: "Europe" 
-                      },
-                      { 
-                        name: "Japan", 
-                        flag: "JP", 
-                        color: "bg-red-500",
-                        capital: "Tokyo",
-                        continent: "Asia" 
-                      },
-                      { 
-                        name: "Brazil", 
-                        flag: "BR", 
-                        color: "bg-green-500",
-                        capital: "Brasília",
-                        continent: "South America" 
-                      },
-                      { 
-                        name: "Egypt", 
-                        flag: "EG", 
-                        color: "bg-amber-500",
-                        capital: "Cairo",
-                        continent: "Africa" 
-                      },
-                      { 
-                        name: "Australia", 
-                        flag: "AU", 
-                        color: "bg-indigo-500",
-                        capital: "Canberra",
-                        continent: "Oceania" 
-                      },
-                      { 
-                        name: "Canada", 
-                        flag: "CA", 
-                        color: "bg-red-600",
-                        capital: "Ottawa",
-                        continent: "North America" 
-                      },
-                      { 
-                        name: "Germany", 
-                        flag: "DE", 
-                        color: "bg-yellow-600",
-                        capital: "Berlin",
-                        continent: "Europe" 
-                      },
-                      { 
-                        name: "India", 
-                        flag: "IN", 
-                        color: "bg-orange-500",
-                        capital: "New Delhi",
-                        continent: "Asia" 
-                      }
-                    ].map((country, index) => (
-                      <motion.a 
-                        href="/"
-                        key={index}
-                        className="flex-shrink-0 w-64 bg-white rounded-xl shadow-md overflow-hidden no-underline"
-                        whileHover={{ y: -5, scale: 1.02 }}
-                        transition={{ type: "spring", stiffness: 300 }}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 relative">
+            {/* Animated Globe */}
+            <div className="lg:col-span-2 order-2 lg:order-1">
+              <motion.div 
+                className="relative"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <div className="aspect-square max-w-md mx-auto relative">
+                  {/* The globe */}
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-xl p-4">
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-300 to-cyan-500 relative overflow-hidden">
+                      {/* Continents (stylized) */}
+                      <motion.div 
+                        className="absolute inset-0"
+                        animate={{ rotate: 360 }}
+                        transition={{ 
+                          duration: 120, 
+                          repeat: Infinity, 
+                          ease: "linear" 
+                        }}
                       >
-                        <div className="relative h-20 flex items-center justify-center overflow-hidden bg-gray-100">
-                          <span className="absolute text-[55px] drop-shadow-md">
-                            {country.flag === "FR" && "🇫🇷"}
-                            {country.flag === "JP" && "🇯🇵"}
-                            {country.flag === "BR" && "🇧🇷"}
-                            {country.flag === "EG" && "🇪🇬"}
-                            {country.flag === "AU" && "🇦🇺"}
-                            {country.flag === "CA" && "🇨🇦"}
-                            {country.flag === "DE" && "🇩🇪"}
-                            {country.flag === "IN" && "🇮🇳"}
-                          </span>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                          <div className={`absolute bottom-0 left-0 right-0 h-2 ${country.color}`}></div>
-                        </div>
-                        <div className="p-4">
-                          <h3 className="font-bold text-lg text-center text-gray-900 mb-2">{country.name}</h3>
-                          <div className="text-sm text-gray-600">
-                            <p><span className="font-medium">Capitale:</span> {country.capital}</p>
-                            <p><span className="font-medium">Continent:</span> {country.continent}</p>
-                          </div>
-                          <div className="mt-3 text-center">
-                            <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
-                              Découvrir
-                            </span>
-                          </div>
-                        </div>
-                      </motion.a>
-                    ))}
+                        {/* Africa */}
+                        <div className="absolute bg-green-400/90 rounded-tl-[90%] rounded-tr-[50%] rounded-bl-[40%] rounded-br-[70%]" 
+                          style={{ width: '28%', height: '36%', left: '45%', top: '40%' }}></div>
+                        
+                        {/* Europe */}
+                        <div className="absolute bg-amber-400/90 rounded-tl-[40%] rounded-tr-[70%] rounded-bl-[60%] rounded-br-[50%]" 
+                          style={{ width: '20%', height: '20%', left: '48%', top: '20%' }}></div>
+                        
+                        {/* Asia */}
+                        <div className="absolute bg-red-400/90 rounded-tl-[60%] rounded-tr-[40%] rounded-bl-[50%] rounded-br-[70%]" 
+                          style={{ width: '38%', height: '36%', left: '60%', top: '22%' }}></div>
+                        
+                        {/* North America */}
+                        <div className="absolute bg-blue-400/90 rounded-tl-[50%] rounded-tr-[60%] rounded-bl-[40%] rounded-br-[70%]" 
+                          style={{ width: '30%', height: '28%', left: '12%', top: '18%' }}></div>
+                        
+                        {/* South America */}
+                        <div className="absolute bg-purple-400/90 rounded-tl-[40%] rounded-tr-[70%] rounded-bl-[30%] rounded-br-[60%]" 
+                          style={{ width: '18%', height: '28%', left: '25%', top: '50%' }}></div>
+                        
+                        {/* Australia */}
+                        <div className="absolute bg-orange-400/90 rounded-tl-[60%] rounded-tr-[50%] rounded-bl-[40%] rounded-br-[60%]" 
+                          style={{ width: '18%', height: '18%', left: '75%', top: '65%' }}></div>
+                      </motion.div>
+                      
+                      {/* Grid lines */}
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-[95%] h-[95%] border-2 border-white/20 rounded-full"></div>
+                        <div className="absolute w-full h-[1px] bg-white/20 top-1/2 left-0"></div>
+                        <div className="absolute w-[1px] h-full bg-white/20 top-0 left-1/2"></div>
+                      </div>
+                      
+                      {/* Glowing effect */}
+                      <div className="absolute top-1/4 right-1/4 w-16 h-16 rounded-full bg-white/30 blur-xl"></div>
+                    </div>
                   </div>
-                </motion.div>
-              </div>
+                  
+                  {/* Animated orbit */}
+                  <motion.div 
+                    className="absolute h-[110%] w-[110%] rounded-full border-2 border-dashed border-blue-300/30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                    animate={{ rotate: 360 }}
+                    transition={{ 
+                      duration: 30, 
+                      repeat: Infinity, 
+                      ease: "linear"
+                    }}
+                  ></motion.div>
+                  
+                  {/* Location pins with pulse animation */}
+                  {[
+                    { name: "New York", left: "22%", top: "30%", delay: 0 },
+                    { name: "London", left: "47%", top: "25%", delay: 1.2 },
+                    { name: "Tokyo", left: "80%", top: "32%", delay: 0.6 },
+                    { name: "Sydney", left: "83%", top: "70%", delay: 1.8 },
+                    { name: "Rio", left: "30%", top: "65%", delay: 2.4 },
+                  ].map((pin, i) => (
+                    <div key={i} className="absolute" style={{ left: pin.left, top: pin.top }}>
+                      <motion.div 
+                        className="relative"
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5 + i * 0.15 }}
+                      >
+                        <div className="w-2.5 h-2.5 bg-red-500 rounded-full relative z-10">
+                        </div>
+                        <motion.div 
+                          className="absolute w-6 h-6 rounded-full bg-red-500/60 -top-[7px] -left-[7px]"
+                          animate={{ scale: [0.8, 1.4, 0.8], opacity: [0.6, 0, 0.6] }}
+                          transition={{ 
+                            duration: 2, 
+                            delay: pin.delay,
+                            repeat: Infinity,
+                            repeatType: "loop"
+                          }}
+                        ></motion.div>
+                      </motion.div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </div>
             
-            {/* Overlay gradient effects */}
-            <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
-            <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
-            
-            <div className="text-center mt-12">
-              <motion.a
-                href="/"
-                className="inline-block py-3 px-8 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-bold text-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            {/* Interactive Stats */}
+            <div className="lg:col-span-3 order-1 lg:order-2 flex flex-col justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6"
               >
-                Explorer tous les pays
-              </motion.a>
-              <p className="mt-3 text-sm text-gray-500">
-                Plus de 200 pays sont disponibles sur notre plateforme
-              </p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Key Insights From Our Platform</h3>
+                
+                <div className="space-y-6">
+                  {[
+                    { 
+                      title: "Democracy Index", 
+                      value: "Global coverage", 
+                      icon: <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                      </div>,
+                      description: "Track democratic progress in every country with our comprehensive index"
+                    },
+                    { 
+                      title: "Interactive Political Maps", 
+                      value: "6 continents", 
+                      icon: <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                          <line x1="8" y1="2" x2="8" y2="18"></line>
+                          <line x1="16" y1="6" x2="16" y2="22"></line>
+                        </svg>
+                      </div>,
+                      description: "Visualize global political data with stunning interactive maps"
+                    },
+                    { 
+                      title: "Historical Timeline", 
+                      value: "500+ years of data", 
+                      icon: <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                      </div>,
+                      description: "Explore how political systems have evolved through centuries"
+                    }
+                  ].map((item, index) => (
+                    <motion.div 
+                      key={index}
+                      className="flex items-start gap-4"
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                      whileHover={{ 
+                        backgroundColor: "rgba(var(--primary), 0.03)",
+                        borderRadius: "0.5rem",
+                        padding: "0.5rem"
+                      }}
+                    >
+                      {item.icon}
+                      <div>
+                        <div className="flex items-baseline justify-between">
+                          <h4 className="font-bold text-gray-900">{item.title}</h4>
+                          <span className="text-sm font-semibold text-primary">{item.value}</span>
+                        </div>
+                        <p className="text-gray-600 text-sm mt-1">{item.description}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                <motion.a
+                  href="/"
+                  className="mt-8 inline-block py-3 px-6 bg-primary text-white rounded-xl shadow-md hover:shadow-lg transition-all font-bold"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Start Exploring
+                </motion.a>
+              </motion.div>
             </div>
           </div>
         </div>
