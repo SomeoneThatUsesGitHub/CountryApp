@@ -94,30 +94,7 @@ const AboutPage: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Floating elements animation */}
-          <div className="hidden md:block absolute top-0 left-0 w-full h-full pointer-events-none">
-            {[1, 2, 3].map((i) => (
-              <motion.div 
-                key={i}
-                className="absolute rounded-lg bg-white/10 backdrop-blur-sm"
-                style={{
-                  width: Math.random() * 60 + 20,
-                  height: Math.random() * 60 + 20,
-                  left: `${Math.random() * 90}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  y: [0, -20, 0],
-                  rotate: [0, Math.random() * 20, 0],
-                }}
-                transition={{
-                  duration: 5 + Math.random() * 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
-          </div>
+
         </div>
       </section>
 
@@ -201,6 +178,83 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Interactive Quiz Section - Original Content */}
+      <section className="py-16 px-4 bg-gradient-to-br from-primary-light/20 to-primary/10">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Test Your <span className="text-primary">Knowledge</span>
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              Challenge yourself with these fun questions about world politics!
+            </p>
+          </motion.div>
+          
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-primary to-primary-dark p-6 text-white">
+              <h3 className="text-xl md:text-2xl font-bold">Quick Politics Quiz</h3>
+              <p className="text-white/80">See how much you already know!</p>
+            </div>
+            
+            <div className="p-6 md:p-8">
+              <div className="space-y-6">
+                {/* Sample Quiz Question */}
+                <motion.div 
+                  className="bg-gray-50 rounded-xl p-6 border border-gray-100"
+                  whileHover={{ scale: 1.01 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <h4 className="font-bold text-lg mb-3">Which of these is NOT a form of government?</h4>
+                  
+                  <div className="space-y-2">
+                    {['Democracy', 'Monarchy', 'Socialarchy', 'Republic'].map((option, i) => (
+                      <div 
+                        key={i} 
+                        className="flex items-center p-3 bg-white rounded-lg border border-gray-200 hover:border-primary hover:bg-blue-50 transition-colors cursor-pointer"
+                      >
+                        <div className="w-5 h-5 rounded-full border-2 border-gray-300 mr-3 flex-shrink-0"></div>
+                        <span>{option}</span>
+                        {option === 'Socialarchy' && (
+                          <div className="ml-auto px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                            Correct!
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <p className="text-sm text-gray-700">
+                      <strong>Fun Fact:</strong> "Socialarchy" is a made-up term! The main types of government include Democracy, Monarchy, Republic, Theocracy, Autocracy, and several others.
+                    </p>
+                  </div>
+                </motion.div>
+                
+                <div className="text-center">
+                  <motion.a
+                    href="/"
+                    className="inline-block py-3 px-8 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-bold text-lg"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Take the Full Quiz
+                  </motion.a>
+                  <p className="mt-3 text-sm text-gray-500">
+                    Explore our platform to learn more about world governments
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Call to Action */}
       <section className="py-16 px-4 bg-white text-center">
         <div className="container mx-auto max-w-3xl">
