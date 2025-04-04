@@ -269,40 +269,40 @@ const AboutPage: React.FC = () => {
                         continent: "Asia" 
                       }
                     ].map((country, index) => (
-                      <motion.div
+                      <motion.a 
+                        href="/"
                         key={index}
-                        className="flex-shrink-0 w-64 bg-white rounded-xl shadow-md overflow-hidden"
+                        className="flex-shrink-0 w-64 bg-white rounded-xl shadow-md overflow-hidden no-underline"
                         whileHover={{ y: -5, scale: 1.02 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <div className={`h-6 ${country.color}`}></div>
+                        <div className="relative h-20 flex items-center justify-center overflow-hidden bg-gray-100">
+                          <span className="absolute text-[55px] drop-shadow-md">
+                            {country.flag === "FR" && "🇫🇷"}
+                            {country.flag === "JP" && "🇯🇵"}
+                            {country.flag === "BR" && "🇧🇷"}
+                            {country.flag === "EG" && "🇪🇬"}
+                            {country.flag === "AU" && "🇦🇺"}
+                            {country.flag === "CA" && "🇨🇦"}
+                            {country.flag === "DE" && "🇩🇪"}
+                            {country.flag === "IN" && "🇮🇳"}
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                          <div className={`absolute bottom-0 left-0 right-0 h-2 ${country.color}`}></div>
+                        </div>
                         <div className="p-4">
-                          <div className="flex items-center mb-3">
-                            <span className="text-2xl mr-2">
-                              {country.flag === "FR" && "🇫🇷"}
-                              {country.flag === "JP" && "🇯🇵"}
-                              {country.flag === "BR" && "🇧🇷"}
-                              {country.flag === "EG" && "🇪🇬"}
-                              {country.flag === "AU" && "🇦🇺"}
-                              {country.flag === "CA" && "🇨🇦"}
-                              {country.flag === "DE" && "🇩🇪"}
-                              {country.flag === "IN" && "🇮🇳"}
-                            </span>
-                            <h3 className="font-bold text-lg">{country.name}</h3>
-                          </div>
+                          <h3 className="font-bold text-lg text-center text-gray-900 mb-2">{country.name}</h3>
                           <div className="text-sm text-gray-600">
                             <p><span className="font-medium">Capitale:</span> {country.capital}</p>
                             <p><span className="font-medium">Continent:</span> {country.continent}</p>
                           </div>
-                          <motion.a
-                            href={`/country/${country.name.toLowerCase()}`}
-                            className="mt-3 inline-block px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium"
-                            whileHover={{ backgroundColor: "rgba(var(--primary), 0.2)" }}
-                          >
-                            Découvrir
-                          </motion.a>
+                          <div className="mt-3 text-center">
+                            <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
+                              Découvrir
+                            </span>
+                          </div>
                         </div>
-                      </motion.div>
+                      </motion.a>
                     ))}
                   </div>
                 </motion.div>
