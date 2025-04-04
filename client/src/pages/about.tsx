@@ -178,7 +178,7 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Interactive Quiz Section - Original Content */}
+      {/* Countries Carousel Section - Original Content */}
       <section className="py-16 px-4 bg-gradient-to-br from-primary-light/20 to-primary/10">
         <div className="container mx-auto max-w-4xl">
           <motion.div
@@ -189,67 +189,142 @@ const AboutPage: React.FC = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Test Your <span className="text-primary">Knowledge</span>
+              Explore <span className="text-primary">Countries</span>
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Challenge yourself with these fun questions about world politics!
+              Découvrez des pays fascinants du monde entier
             </p>
           </motion.div>
           
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="bg-gradient-to-r from-primary to-primary-dark p-6 text-white">
-              <h3 className="text-xl md:text-2xl font-bold">Quick Politics Quiz</h3>
-              <p className="text-white/80">See how much you already know!</p>
-            </div>
-            
-            <div className="p-6 md:p-8">
-              <div className="space-y-6">
-                {/* Sample Quiz Question */}
+          <div className="relative overflow-hidden py-10">
+            {/* Main Carousel */}
+            <div className="carousel-container relative">
+              <div className="carousel-track flex">
+                {/* This would normally be fetched from the API, but for demo using hardcoded examples */}
                 <motion.div 
-                  className="bg-gray-50 rounded-xl p-6 border border-gray-100"
-                  whileHover={{ scale: 1.01 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  className="carousel-wrapper"
+                  animate={{ x: ["0%", "-100%"] }}
+                  transition={{ 
+                    repeat: Infinity, 
+                    duration: 30,
+                    ease: "linear"
+                  }}
                 >
-                  <h4 className="font-bold text-lg mb-3">Which of these is NOT a form of government?</h4>
-                  
-                  <div className="space-y-2">
-                    {['Democracy', 'Monarchy', 'Socialarchy', 'Republic'].map((option, i) => (
-                      <div 
-                        key={i} 
-                        className="flex items-center p-3 bg-white rounded-lg border border-gray-200 hover:border-primary hover:bg-blue-50 transition-colors cursor-pointer"
+                  <div className="flex gap-6">
+                    {[
+                      { 
+                        name: "France", 
+                        flag: "FR", 
+                        color: "bg-blue-500",
+                        capital: "Paris",
+                        continent: "Europe" 
+                      },
+                      { 
+                        name: "Japan", 
+                        flag: "JP", 
+                        color: "bg-red-500",
+                        capital: "Tokyo",
+                        continent: "Asia" 
+                      },
+                      { 
+                        name: "Brazil", 
+                        flag: "BR", 
+                        color: "bg-green-500",
+                        capital: "Brasília",
+                        continent: "South America" 
+                      },
+                      { 
+                        name: "Egypt", 
+                        flag: "EG", 
+                        color: "bg-amber-500",
+                        capital: "Cairo",
+                        continent: "Africa" 
+                      },
+                      { 
+                        name: "Australia", 
+                        flag: "AU", 
+                        color: "bg-indigo-500",
+                        capital: "Canberra",
+                        continent: "Oceania" 
+                      },
+                      { 
+                        name: "Canada", 
+                        flag: "CA", 
+                        color: "bg-red-600",
+                        capital: "Ottawa",
+                        continent: "North America" 
+                      },
+                      { 
+                        name: "Germany", 
+                        flag: "DE", 
+                        color: "bg-yellow-600",
+                        capital: "Berlin",
+                        continent: "Europe" 
+                      },
+                      { 
+                        name: "India", 
+                        flag: "IN", 
+                        color: "bg-orange-500",
+                        capital: "New Delhi",
+                        continent: "Asia" 
+                      }
+                    ].map((country, index) => (
+                      <motion.div
+                        key={index}
+                        className="flex-shrink-0 w-64 bg-white rounded-xl shadow-md overflow-hidden"
+                        whileHover={{ y: -5, scale: 1.02 }}
+                        transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <div className="w-5 h-5 rounded-full border-2 border-gray-300 mr-3 flex-shrink-0"></div>
-                        <span>{option}</span>
-                        {option === 'Socialarchy' && (
-                          <div className="ml-auto px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                            Correct!
+                        <div className={`h-6 ${country.color}`}></div>
+                        <div className="p-4">
+                          <div className="flex items-center mb-3">
+                            <span className="text-2xl mr-2">
+                              {country.flag === "FR" && "🇫🇷"}
+                              {country.flag === "JP" && "🇯🇵"}
+                              {country.flag === "BR" && "🇧🇷"}
+                              {country.flag === "EG" && "🇪🇬"}
+                              {country.flag === "AU" && "🇦🇺"}
+                              {country.flag === "CA" && "🇨🇦"}
+                              {country.flag === "DE" && "🇩🇪"}
+                              {country.flag === "IN" && "🇮🇳"}
+                            </span>
+                            <h3 className="font-bold text-lg">{country.name}</h3>
                           </div>
-                        )}
-                      </div>
+                          <div className="text-sm text-gray-600">
+                            <p><span className="font-medium">Capitale:</span> {country.capital}</p>
+                            <p><span className="font-medium">Continent:</span> {country.continent}</p>
+                          </div>
+                          <motion.a
+                            href={`/country/${country.name.toLowerCase()}`}
+                            className="mt-3 inline-block px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium"
+                            whileHover={{ backgroundColor: "rgba(var(--primary), 0.2)" }}
+                          >
+                            Découvrir
+                          </motion.a>
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
-                  
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                    <p className="text-sm text-gray-700">
-                      <strong>Fun Fact:</strong> "Socialarchy" is a made-up term! The main types of government include Democracy, Monarchy, Republic, Theocracy, Autocracy, and several others.
-                    </p>
-                  </div>
                 </motion.div>
-                
-                <div className="text-center">
-                  <motion.a
-                    href="/"
-                    className="inline-block py-3 px-8 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-bold text-lg"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Take the Full Quiz
-                  </motion.a>
-                  <p className="mt-3 text-sm text-gray-500">
-                    Explore our platform to learn more about world governments
-                  </p>
-                </div>
               </div>
+            </div>
+            
+            {/* Overlay gradient effects */}
+            <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
+            <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
+            
+            <div className="text-center mt-12">
+              <motion.a
+                href="/"
+                className="inline-block py-3 px-8 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-bold text-lg"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Explorer tous les pays
+              </motion.a>
+              <p className="mt-3 text-sm text-gray-500">
+                Plus de 200 pays sont disponibles sur notre plateforme
+              </p>
             </div>
           </div>
         </div>
