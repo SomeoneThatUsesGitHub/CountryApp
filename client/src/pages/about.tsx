@@ -31,93 +31,93 @@ const AboutPage: React.FC = () => {
   // Features of the platform with youth-friendly descriptions
   const features = [
     {
-      icon: <Globe className="h-8 w-8 text-white" />,
+      icon: () => <Globe className="h-8 w-8 text-white" />,
       title: "Global Adventure",
       description: "Explore awesome facts about every country on Earth – like a world tour from your device!",
       color: "bg-blue-500"
     },
     {
-      icon: <Rocket className="h-8 w-8 text-white" />,
+      icon: () => <Rocket className="h-8 w-8 text-white" />,
       title: "Interactive Missions",
       description: "Fun challenges and interactive graphics that make learning about politics actually exciting!",
       color: "bg-purple-500"
     },
     {
-      icon: <Map className="h-8 w-8 text-white" />,
+      icon: () => <Map className="h-8 w-8 text-white" />,
       title: "World Relations",
       description: "See how countries connect with cool visuals showing alliances, conflicts, and partnerships.",
       color: "bg-green-500"
     },
     {
-      icon: <Trophy className="h-8 w-8 text-white" />,
+      icon: () => <Trophy className="h-8 w-8 text-white" />,
       title: "Government Explorer",
       description: "Discover how different countries are run in a way that's super easy to understand.",
       color: "bg-amber-500"
     },
     {
-      icon: <PieChart className="h-8 w-8 text-white" />,
+      icon: () => <PieChart className="h-8 w-8 text-white" />,
       title: "Economy Visualized",
       description: "See money and trade data transform into colorful charts that tell amazing stories.",
       color: "bg-red-500"
     },
     {
-      icon: <Zap className="h-8 w-8 text-white" />,
+      icon: () => <Zap className="h-8 w-8 text-white" />,
       title: "Time Travel",
       description: "Jump through history with interactive timelines showing key moments for each country.",
       color: "bg-cyan-500"
     }
   ];
 
-  // Fun facts with polygonal icons
+  // Fun facts with polygonal icons - using components directly instead of references
   const funFacts = [
     {
-      icon: Star,
+      icon: () => <Star className="h-8 w-8 text-white" />,
       title: "5,000+ Facts",
       description: "Our database has thousands of interesting facts about countries around the world.",
       color: "bg-indigo-400"
     },
     {
-      icon: Target,
+      icon: () => <Target className="h-8 w-8 text-white" />,
       title: "200+ Countries",
       description: "Explore detailed profiles of every recognized country on the planet.",
       color: "bg-emerald-400"
     },
     {
-      icon: Users,
+      icon: () => <Users className="h-8 w-8 text-white" />,
       title: "For All Ages",
       description: "Designed for students from elementary school through high school.",
       color: "bg-rose-400"
     }
   ];
 
-  // Cool features for young learners
+  // Cool features for young learners - using component functions instead of references
   const coolFeatures = [
     {
-      icon: Gamepad2,
+      icon: () => <Gamepad2 className="h-24 w-24 text-white drop-shadow-lg" />,
       title: "Learn Through Play",
       description: "Politics doesn't have to be boring! Our interactive elements make learning fun.",
       color: "from-purple-500 to-blue-500"
     },
     {
-      icon: Sparkles,
+      icon: () => <Sparkles className="h-24 w-24 text-white drop-shadow-lg" />,
       title: "Visual Learning",
       description: "Colorful graphics and animations help you understand complex ideas instantly.",
       color: "from-yellow-500 to-orange-500"
     },
     {
-      icon: Lightbulb,
+      icon: () => <Lightbulb className="h-24 w-24 text-white drop-shadow-lg" />,
       title: "Curiosity Rewarded",
       description: "The more you explore, the more interesting connections you'll discover.",
       color: "from-green-500 to-teal-500"
     },
     {
-      icon: Brain,
+      icon: () => <Brain className="h-24 w-24 text-white drop-shadow-lg" />,
       title: "Knowledge Power",
       description: "Become the expert among your friends on global politics and geography.",
       color: "from-red-500 to-pink-500"
     },
     {
-      icon: MessageCircle,
+      icon: () => <MessageCircle className="h-24 w-24 text-white drop-shadow-lg" />,
       title: "Easy to Explain",
       description: "Learn concepts that you can easily share and discuss with friends and family.",
       color: "from-blue-500 to-indigo-500"
@@ -305,7 +305,7 @@ const AboutPage: React.FC = () => {
                   className="flex items-center mb-6 group"
                 >
                   <div className={`w-16 h-16 ${fact.color} rounded-xl flex items-center justify-center transform group-hover:rotate-6 transition-all shadow-md`}>
-                    <fact.icon className="h-8 w-8 text-white" />
+                    {fact.icon()}
                   </div>
                   <div className="ml-4">
                     <h3 className="text-xl font-bold text-gray-900">{fact.title}</h3>
@@ -361,7 +361,7 @@ const AboutPage: React.FC = () => {
                     
                     {/* Main icon */}
                     <div className="relative z-10 transform transition-transform hover:scale-110 hover:rotate-3">
-                      <feature.icon className="h-24 w-24 text-white drop-shadow-lg" />
+                      {feature.icon()}
                     </div>
                     
                     {/* Text label */}
