@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import EconomicDataEditor from '@/components/admin/EconomicDataEditor';
 import { 
   Form, 
   FormField, 
@@ -197,6 +198,7 @@ const AdminPage: React.FC = () => {
                 <TabsTrigger value="basic">Basic Information</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
                 <TabsTrigger value="political">Political System</TabsTrigger>
+                <TabsTrigger value="economy">Economy</TabsTrigger>
                 <TabsTrigger value="relations">International Relations</TabsTrigger>
                 <TabsTrigger value="statistics">Statistics</TabsTrigger>
               </TabsList>
@@ -467,6 +469,21 @@ const AdminPage: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <ConflictsEditor countryId={selectedCountry.id} />
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+              
+              {/* Economy Tab */}
+              <TabsContent value="economy">
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Economic Data</CardTitle>
+                      <CardDescription>Manage economic data for this country</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <EconomicDataEditor countryId={selectedCountry.id} />
                     </CardContent>
                   </Card>
                 </div>
