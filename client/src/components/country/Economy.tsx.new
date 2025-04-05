@@ -196,7 +196,6 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
           </motion.div>
         </div>
 
-
         {/* Top Companies Section */}
         {companyList.length > 0 && (
           <motion.div
