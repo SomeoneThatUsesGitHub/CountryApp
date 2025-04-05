@@ -34,6 +34,7 @@ const economicDataSchema = z.object({
   gdpGrowth: z.string().optional().nullable(),
   inflation: z.string().optional().nullable(),
   exchangeRate: z.string().optional().nullable(),
+  currencyCode: z.string().optional().nullable(),
   gdpHistory: z.array(gdpDataPointSchema).optional(),
 });
 
@@ -62,6 +63,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
       gdpGrowth: null,
       inflation: null,
       exchangeRate: null,
+      currencyCode: null,
     },
   });
   
@@ -111,6 +113,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
         gdpGrowth: economicData.gdpGrowth || null,
         inflation: economicData.inflation || null,
         exchangeRate: economicData.exchangeRate || null,
+        currencyCode: economicData.currencyCode || null,
         gdpHistory: gdpHistoryData,
       });
     }
@@ -159,6 +162,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
         gdpGrowth: formValues.gdpGrowth,
         inflation: formValues.inflation,
         exchangeRate: formValues.exchangeRate,
+        currencyCode: formValues.currencyCode,
       };
       
       // Format growth and inflation if they don't already have % symbol
@@ -387,7 +391,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
             name="exchangeRate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Exchange Rate (EUR to USD)</FormLabel>
+                <FormLabel>Exchange Rate (EUR to Local Currency)</FormLabel>
                 <FormControl>
                   <Input 
                     placeholder="e.g. 1.08" 
@@ -395,7 +399,26 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
                     value={field.value || ''}
                   />
                 </FormControl>
-                <FormDescription>Current exchange rate from Euro to US Dollar</FormDescription>
+                <FormDescription>Current exchange rate from Euro to local currency (e.g. 1.08 means 1€ = 1.08 of local currency)</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="currencyCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Currency Code</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="e.g. USD, GBP, JPY" 
+                    {...field} 
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormDescription>Currency code of the country</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

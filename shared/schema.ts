@@ -125,7 +125,8 @@ export const economicData = pgTable("economicData", {
   outlook: text("outlook"), // Economic outlook description
   initiatives: jsonb("initiatives"), // array of economic initiatives
   gdpHistory: jsonb("gdpHistory"), // array of historical GDP data for charting
-  exchangeRate: text("exchangeRate"), // Exchange rate to USD (e.g., "0.92" for EUR)
+  exchangeRate: text("exchangeRate"), // Exchange rate from EUR to country currency
+  currencyCode: text("currencyCode"), // Currency code (e.g., "USD", "GBP", "JPY")
 });
 
 // Political Party schema

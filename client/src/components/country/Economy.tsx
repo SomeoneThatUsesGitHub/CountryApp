@@ -567,7 +567,10 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
             <h2 className="text-2xl font-bold">Currency Converter</h2>
           </div>
 
-          <CurrencyConverter exchangeRate={freshEconomicData?.exchangeRate} />
+          <CurrencyConverter 
+            exchangeRate={freshEconomicData?.exchangeRate}
+            currencyCode={freshEconomicData?.currencyCode}
+          />
         </motion.div>
       </motion.div>
     </div>
@@ -577,37 +580,57 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
 // Component for Currency Converter
 interface CurrencyConverterProps {
   exchangeRate?: string | null;
+  currencyCode?: string | null;
 }
 
-const CurrencyConverter: React.FC<CurrencyConverterProps> = ({ exchangeRate }) => {
+const CurrencyConverter: React.FC<CurrencyConverterProps> = ({ exchangeRate, currencyCode }) => {
   const [euroAmount, setEuroAmount] = useState<string>('100');
-  const [dollarAmount, setDollarAmount] = useState<string>('');
+  const [localAmount, setLocalAmount] = useState<string>('');
   
-  // Default exchange rate if none provided (1 EUR = 1.08 USD as a fallback)
+  // Default values if none provided
   const rate = exchangeRate ? parseFloat(exchangeRate) : 1.08;
+  const currency = currencyCode || 'USD';
+  
+  // Get currency symbol
+  const getCurrencySymbol = (code: string): string => {
+    switch (code) {
+      case 'USD': return '$';
+      case 'GBP': return '£';
+      case 'JPY': return '¥';
+      case 'CNY': return '¥';
+      case 'INR': return '₹';
+      case 'RUB': return '₽';
+      case 'CHF': return 'Fr';
+      case 'AUD': return 'A$';
+      case 'CAD': return 'C$';
+      default: return code;
+    }
+  };
+  
+  const currencySymbol = getCurrencySymbol(currency);
   
   // Calculate when euro amount changes
   useEffect(() => {
     if (euroAmount) {
       const euros = parseFloat(euroAmount);
       if (!isNaN(euros)) {
-        const dollars = (euros * rate).toFixed(2);
-        setDollarAmount(dollars);
+        const converted = (euros * rate).toFixed(2);
+        setLocalAmount(converted);
       }
     } else {
-      setDollarAmount('');
+      setLocalAmount('');
     }
   }, [euroAmount, rate]);
   
-  // Calculate when dollar amount changes
-  const handleDollarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dollars = e.target.value;
-    setDollarAmount(dollars);
+  // Calculate when local currency amount changes
+  const handleLocalCurrencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const amount = e.target.value;
+    setLocalAmount(amount);
     
-    if (dollars) {
-      const dollarValue = parseFloat(dollars);
-      if (!isNaN(dollarValue)) {
-        const euros = (dollarValue / rate).toFixed(2);
+    if (amount) {
+      const localValue = parseFloat(amount);
+      if (!isNaN(localValue)) {
+        const euros = (localValue / rate).toFixed(2);
         setEuroAmount(euros);
       }
     } else {
@@ -620,7 +643,7 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({ exchangeRate }) =
       <CardContent className="p-6">
         <CardTitle className="text-xl mb-4 flex items-center">
           <DollarSign className="h-5 w-5 mr-2 text-blue-600" />
-          Euro to Dollar Converter
+          Currency Converter
         </CardTitle>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -639,22 +662,22 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({ exchangeRate }) =
           </div>
           
           <div className="p-4 bg-green-50 rounded-lg">
-            <div className="mb-2 font-medium text-gray-700">Dollar Amount</div>
+            <div className="mb-2 font-medium text-gray-700">{currency} Amount</div>
             <div className="flex items-center">
-              <span className="text-lg mr-2">$</span>
+              <span className="text-lg mr-2">{currencySymbol}</span>
               <input
                 type="number"
-                value={dollarAmount}
-                onChange={handleDollarChange}
+                value={localAmount}
+                onChange={handleLocalCurrencyChange}
                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="Enter amount in Dollars"
+                placeholder={`Enter amount in ${currency}`}
               />
             </div>
           </div>
         </div>
         
         <p className="text-center mt-4 text-sm text-gray-500">
-          Current Exchange Rate: 1 Euro = {rate.toFixed(2)} US Dollars
+          Current Exchange Rate: 1 Euro = {rate.toFixed(2)} {currency}
         </p>
       </CardContent>
     </Card>
