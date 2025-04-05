@@ -39,9 +39,9 @@ const CountryBanner: React.FC<CountryBannerProps> = ({ country }) => {
         
         {/* Bottom section with country info */}
         <div className="mt-auto">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{country.name}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">{country.name}</h1>
           
-          <div className="flex flex-wrap gap-2 md:gap-4 mt-2">
+          <div className="flex flex-wrap gap-2 md:gap-4 mt-4">
             <div className="bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center gap-1.5 md:gap-2 text-sm md:text-base">
               <i className="fas fa-users"></i>
               <span>{formatNumber(country.population || 0)}</span>

@@ -33,11 +33,8 @@ const CountryCard: React.FC<CountryCardProps> = ({ country, accentColor = 'bg-pr
       whileHover={{ y: -5, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      {/* Top accent line */}
-      <div className={`h-1.5 ${accentColor}`}></div>
-      
       {/* Card content */}
-      <div className="flex flex-col h-[calc(100%-6px)]">
+      <div className="flex flex-col h-full">
         {/* Flag area */}
         <div 
           className="h-36 bg-cover bg-center relative" 
