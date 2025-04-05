@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { EconomicData } from '@shared/schema';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon, ChartBar } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon, ChartBar, ArrowDownToLine as Import, ArrowUpFromLine as Export } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts';
 import { Separator } from '@/components/ui/separator';
 
@@ -24,6 +24,45 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
         <p className="text-gray-500 text-lg">Economic data not available for {countryName}</p>
       </motion.div>
     );
+  }
+
+  // Sample trade data for imports/exports
+  const tradeData = {
+    imports: [
+      { product: 'Machinery', value: '$98.2B', percentage: 14.3 },
+      { product: 'Vehicles', value: '$87.5B', percentage: 12.8 },
+      { product: 'Electronics', value: '$79.1B', percentage: 11.6 }
+    ],
+    exports: [
+      { product: 'Automobiles', value: '$129.7B', percentage: 17.2 },
+      { product: 'Machinery', value: '$118.5B', percentage: 15.7 },
+      { product: 'Pharmaceuticals', value: '$84.3B', percentage: 11.2 }
+    ]
+  };
+
+  // Customize based on country
+  if (countryName === 'Germany') {
+    tradeData.imports = [
+      { product: 'Machinery', value: '$98.2B', percentage: 14.3 },
+      { product: 'Vehicles', value: '$87.5B', percentage: 12.8 },
+      { product: 'Electronics', value: '$79.1B', percentage: 11.6 }
+    ];
+    tradeData.exports = [
+      { product: 'Automobiles', value: '$129.7B', percentage: 17.2 },
+      { product: 'Machinery', value: '$118.5B', percentage: 15.7 },
+      { product: 'Pharmaceuticals', value: '$84.3B', percentage: 11.2 }
+    ];
+  } else if (countryName === 'United States') {
+    tradeData.imports = [
+      { product: 'Consumer Goods', value: '$654.1B', percentage: 22.8 },
+      { product: 'Vehicles', value: '$376.5B', percentage: 13.1 },
+      { product: 'Electronics', value: '$347.2B', percentage: 12.1 }
+    ];
+    tradeData.exports = [
+      { product: 'Capital Goods', value: '$519.3B', percentage: 34.1 },
+      { product: 'Consumer Goods', value: '$204.8B', percentage: 13.4 },
+      { product: 'Food & Beverages', value: '$137.2B', percentage: 9.0 }
+    ];
   }
 
   // GDP historical data for the chart (sample data)
@@ -56,9 +95,8 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
         transition={{ duration: 0.5 }}
         className="mb-6"
       >
-        {/* Section Title with Icon */}
-        <div className="flex items-center mb-6">
-          <ChartBar className="h-6 w-6 mr-2 text-blue-600" />
+        {/* Section Title */}
+        <div className="mb-6">
           <h2 className="text-2xl font-bold">Key Economic Indicators</h2>
         </div>
 
@@ -181,8 +219,7 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
         <Separator className="my-8 h-1 bg-gray-200" />
 
         {/* GDP Evolution Chart Section Title */}
-        <div className="flex items-center mb-6 mt-8">
-          <LineChartIcon className="h-6 w-6 mr-2 text-blue-600" />
+        <div className="mb-6 mt-8">
           <h2 className="text-2xl font-bold">Economic Growth Trends</h2>
         </div>
 
@@ -243,6 +280,80 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
               <p className="text-xs text-gray-500 mt-2 text-center">* 2024 values are projected based on current growth trends</p>
             </CardContent>
           </Card>
+        </motion.div>
+
+        {/* Thick separator between sections */}
+        <Separator className="my-8 h-1 bg-gray-200" />
+
+        {/* Main Imports and Exports Section Title */}
+        <div className="mb-6 mt-8">
+          <h2 className="text-2xl font-bold">Main Imports and Exports</h2>
+        </div>
+
+        {/* Main Imports and Exports */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="mt-6"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Imports Card */}
+            <Card>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Import className="h-5 w-5 mr-2 text-blue-600" />
+                  Main Imports
+                </CardTitle>
+                
+                <div className="space-y-4">
+                  {tradeData.imports.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="w-1.5 h-8 bg-blue-500 rounded-full mr-3"></div>
+                        <div>
+                          <p className="font-medium">{item.product}</p>
+                          <p className="text-sm text-gray-500">{item.value}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-blue-600">{item.percentage}%</p>
+                        <p className="text-xs text-gray-500">of total imports</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Exports Card */}
+            <Card>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Export className="h-5 w-5 mr-2 text-green-600" />
+                  Main Exports
+                </CardTitle>
+                
+                <div className="space-y-4">
+                  {tradeData.exports.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="w-1.5 h-8 bg-green-500 rounded-full mr-3"></div>
+                        <div>
+                          <p className="font-medium">{item.product}</p>
+                          <p className="text-sm text-gray-500">{item.value}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-green-600">{item.percentage}%</p>
+                        <p className="text-xs text-gray-500">of total exports</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </motion.div>
       </motion.div>
     </div>
