@@ -175,7 +175,7 @@ const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId }) => {
       {/* Visual separator between major sections */}
       {leaders.length > 0 && parties.length > 0 && (
         <div className="py-2">
-          <Separator className="h-0.5 bg-gray-300" />
+          <Separator className="h-1 bg-gray-300" />
         </div>
       )}
       
@@ -298,6 +298,11 @@ const GovernmentSystem: React.FC<GovernmentSystemProps> = ({ countryId }) => {
                 <PartyCard key={party.id} party={party} colorIndex={index} />
               ))}
             </div>
+          </div>
+          
+          {/* Add thick line at the end of Political Parties section - will be visible before International Relations */}
+          <div className="pt-8 pb-0">
+            <div className="border-t-4 border-gray-300 w-full"></div>
           </div>
         </div>
       )}
