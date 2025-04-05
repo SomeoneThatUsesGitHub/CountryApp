@@ -1067,7 +1067,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Economic data not found for this country" });
       }
       
-      const updatedData = await storage.updateEconomicData(id, req.body);
+      // Process the request body to ensure gdpHistory data is properly formatted
+      let processedBody = { ...req.body };
+      
+      if (processedBody.gdpHistory && Array.isArray(processedBody.gdpHistory)) {
+        // Make sure each gdp value is a number
+        processedBody.gdpHistory = processedBody.gdpHistory.map((entry: {year: string, gdp: number | string}) => ({
+          year: entry.year,
+          gdp: typeof entry.gdp === 'string' ? parseFloat(entry.gdp) : entry.gdp
+        }));
+        
+        console.log('Processed GDP history before update:', processedBody.gdpHistory);
+      }
+      
+      const updatedData = await storage.updateEconomicData(id, processedBody);
       if (!updatedData) {
         return res.status(500).json({ message: "Failed to update economic data" });
       }

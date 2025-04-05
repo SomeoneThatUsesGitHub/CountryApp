@@ -67,19 +67,35 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
 
   // GDP historical data for the chart
   const gdpData = economicData.gdpHistory 
-    ? (economicData.gdpHistory as Array<{year: string; gdp: number | null}>)
-        .filter(point => point.gdp !== null) // Filter out null GDP values
-        .sort((a, b) => parseInt(a.year) - parseInt(b.year)) // Sort by year
-    : // Fallback if no data available
-    [
-      { year: '2018', gdp: economicData.gdp * 0.9 },
-      { year: '2019', gdp: economicData.gdp * 0.93 },
-      { year: '2020', gdp: economicData.gdp * 0.88 }, // COVID decline
-      { year: '2021', gdp: economicData.gdp * 0.94 },
-      { year: '2022', gdp: economicData.gdp * 0.97 },
-      { year: '2023', gdp: economicData.gdp },
-      { year: '2024', gdp: economicData.gdp * 1.02 }, // Projected
-    ];
+    ? (Array.isArray(economicData.gdpHistory) 
+        ? (economicData.gdpHistory as Array<{year: string; gdp: number | null}>)
+            .filter(point => point.gdp !== null && point.gdp > 0) // Filter out null and zero GDP values
+            .sort((a, b) => parseInt(a.year) - parseInt(b.year)) // Sort by year
+        : [])
+    : []; // Empty array if no data available
+    
+  console.log('GDP History from DB:', economicData.gdpHistory);
+  console.log('Processed GDP data for chart:', gdpData);
+  
+  // If no GDP history data available, create default data
+  if (gdpData.length === 0) {
+    console.log('No GDP history data available, creating fallback data');
+    const defaultYears = ['2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+    const fallbackData = defaultYears.map((year, index) => {
+      // Create a progressive pattern with a dip for 2020 (COVID)
+      let factor = 0.9 + (index * 0.02);
+      // Add COVID dip
+      if (year === '2020') factor = 0.88;
+      // Use default 2000 if gdp is null/undefined
+      const baseGdp = typeof economicData.gdp === 'number' ? economicData.gdp : 2000;
+      return {
+        year,
+        gdp: Math.round(baseGdp * factor)
+      };
+    });
+    gdpData.push(...fallbackData);
+    console.log('Created fallback GDP data:', gdpData);
+  }
 
   // Extract growth value as a number for determining color
   const growthValue = parseFloat(economicData.gdpGrowth?.replace('%', '') || '0');
