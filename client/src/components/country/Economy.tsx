@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { EconomicData } from '@shared/schema';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon, ChartBar, ArrowDownToLine as Import, ArrowUpFromLine as Export } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts';
 import { Separator } from '@/components/ui/separator';
+import { useQuery } from '@tanstack/react-query';
 
 interface EconomyProps {
   countryName: string;
@@ -12,6 +13,9 @@ interface EconomyProps {
 }
 
 const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
+  // State to store the fresh GDP data
+  const [gdpChartData, setGdpChartData] = useState<any[]>([]);
+  
   // If we don't have economic data yet, show a placeholder
   if (!economicData || !economicData.gdp) {
     return (
@@ -25,6 +29,30 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
       </motion.div>
     );
   }
+  
+  // Fetch fresh economic data directly from the API
+  const { data: freshEconomicData, isLoading: isLoadingFreshData } = useQuery<EconomicData>({
+    queryKey: [`/api/countries/${economicData.countryId}/economy`],
+    refetchOnWindowFocus: true,
+    refetchOnMount: true
+  });
+  
+  // Process the GDP data when fresh data is available
+  useEffect(() => {
+    console.log('Fresh economic data from API:', freshEconomicData);
+    
+    if (freshEconomicData && 
+        typeof freshEconomicData === 'object' && 
+        'gdpHistory' in freshEconomicData && 
+        Array.isArray(freshEconomicData.gdpHistory)) {
+      const processedData = freshEconomicData.gdpHistory
+        .filter((point: {year: string, gdp: number | null}) => point.gdp !== null && point.gdp > 0)
+        .sort((a: {year: string}, b: {year: string}) => parseInt(a.year) - parseInt(b.year));
+      
+      console.log('Using fresh GDP data from API:', processedData);
+      setGdpChartData(processedData);
+    }
+  }, [freshEconomicData]);
 
   // Sample trade data for imports/exports
   const tradeData = {
@@ -261,9 +289,10 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
               </CardTitle>
               
               <div className="h-60 sm:h-80 mt-4">
+                {isLoadingFreshData && <div className="text-center py-20">Loading latest GDP data...</div>}
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
-                    data={gdpData}
+                    data={gdpChartData.length > 0 ? gdpChartData : gdpData}
                     margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                     className="text-xs sm:text-sm"
                   >
