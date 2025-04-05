@@ -111,7 +111,81 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
     form.setValue('topCompanies', newCompanies);
   };
   
-  // Handle form submission
+  // Handle update of main economic indicators only
+  const updateEconomicIndicators = async () => {
+    try {
+      // Get form values excluding companies
+      const formValues = form.getValues();
+      const economicIndicators = {
+        gdp: formValues.gdp,
+        gdpPerCapita: formValues.gdpPerCapita,
+        gdpGrowth: formValues.gdpGrowth,
+        inflation: formValues.inflation,
+      };
+      
+      // Format growth and inflation if they don't already have % symbol
+      if (economicIndicators.gdpGrowth && !economicIndicators.gdpGrowth.includes('%')) {
+        economicIndicators.gdpGrowth = `${economicIndicators.gdpGrowth}%`;
+      }
+      
+      if (economicIndicators.inflation && !economicIndicators.inflation.includes('%')) {
+        economicIndicators.inflation = `${economicIndicators.inflation}%`;
+      }
+      
+      if (economicData?.id) {
+        // Update existing economic indicators only
+        await apiRequest('PATCH', `/api/countries/${countryId}/economy/${economicData.id}`, {
+          ...economicIndicators,
+          countryId,
+        });
+        
+        toast({
+          title: 'Economic Indicators Updated',
+          description: 'The economic indicators have been successfully updated.',
+        });
+        
+        // Refresh the data
+        queryClient.invalidateQueries({ queryKey: [`/api/countries/${countryId}/economy`] });
+      }
+    } catch (error) {
+      console.error('Error updating economic indicators:', error);
+      toast({
+        title: 'Error',
+        description: 'There was an error updating the economic indicators. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+  
+  // Handle update of companies only
+  const updateCompanies = async () => {
+    try {
+      if (economicData?.id) {
+        // Update only the companies data
+        await apiRequest('PATCH', `/api/countries/${countryId}/economy/${economicData.id}`, {
+          topCompanies: companies,
+          countryId,
+        });
+        
+        toast({
+          title: 'Top Companies Updated',
+          description: 'The top companies have been successfully updated.',
+        });
+        
+        // Refresh the data
+        queryClient.invalidateQueries({ queryKey: [`/api/countries/${countryId}/economy`] });
+      }
+    } catch (error) {
+      console.error('Error updating top companies:', error);
+      toast({
+        title: 'Error',
+        description: 'There was an error updating the top companies. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Handle form submission for all data
   const onSubmit = async (data: EconomicDataFormValues) => {
     try {
       // Format growth and inflation if they don't already have % symbol
@@ -305,9 +379,27 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
           )}
         </div>
         
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <div className="space-x-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              disabled={isLoading || !economicData}
+              onClick={updateEconomicIndicators}
+            >
+              Update Economic Indicators Only
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              disabled={isLoading || !economicData || companies.length === 0}
+              onClick={updateCompanies}
+            >
+              Update Companies Only
+            </Button>
+          </div>
           <Button type="submit" disabled={isLoading}>
-            {economicData ? 'Update Economic Data' : 'Save Economic Data'}
+            {economicData ? 'Update All Data' : 'Save Economic Data'}
           </Button>
         </div>
       </form>

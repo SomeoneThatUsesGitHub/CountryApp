@@ -24,6 +24,13 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
     );
   }
 
+  // Parse topCompanies data to ensure it's an array
+  const companies = economicData.topCompanies 
+    ? (typeof economicData.topCompanies === 'string' 
+        ? JSON.parse(economicData.topCompanies as string) 
+        : economicData.topCompanies)
+    : [];
+
   // Extract growth value as a number for determining color
   const growthValue = parseFloat(economicData.gdpGrowth?.replace('%', '') || '0');
   const growthIsPositive = growthValue >= 0;
@@ -160,7 +167,7 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
 
 
         {/* Top Companies Section */}
-        {economicData.topCompanies && (economicData.topCompanies as any[]).length > 0 && (
+        {companies && Array.isArray(companies) && companies.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -175,7 +182,7 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                 </CardTitle>
                 
                 <div className="space-y-4">
-                  {(economicData.topCompanies as Array<{name: string; industry: string; revenue: string}>).map((company, index) => (
+                  {(companies as Array<{name: string; industry: string; revenue: string}>).map((company, index) => (
                     <div key={index} className="flex items-center p-3 rounded-md bg-gray-50 border">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 ${
                         index === 0 ? 'bg-amber-100' : 
