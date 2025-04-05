@@ -79,7 +79,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
       
       if (economicData?.id) {
         // Update existing economic data
-        await apiRequest('PATCH', `/api/countries/${countryId}/economy`, {
+        await apiRequest('PATCH', `/api/countries/${countryId}/economy/${economicData.id}`, {
           ...data,
           countryId,
         });
