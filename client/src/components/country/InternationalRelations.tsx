@@ -294,7 +294,7 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
 
   return (
     <div className="mb-12">
-      {/* Title removed since it's now in the parent component */}
+      <h3 className="text-2xl font-bold mb-4">International Relations</h3>
       
       {/* Key Partners List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
