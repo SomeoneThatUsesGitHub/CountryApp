@@ -54,44 +54,52 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
     }
   }, [freshEconomicData]);
 
-  // Sample trade data for imports/exports
-  const tradeData = {
-    imports: [
-      { product: 'Machinery', value: '$98.2B', percentage: 14.3 },
-      { product: 'Vehicles', value: '$87.5B', percentage: 12.8 },
-      { product: 'Electronics', value: '$79.1B', percentage: 11.6 }
-    ],
-    exports: [
-      { product: 'Automobiles', value: '$129.7B', percentage: 17.2 },
-      { product: 'Machinery', value: '$118.5B', percentage: 15.7 },
-      { product: 'Pharmaceuticals', value: '$84.3B', percentage: 11.2 }
-    ]
-  };
-
-  // Customize based on country
-  if (countryName === 'Germany') {
-    tradeData.imports = [
-      { product: 'Machinery', value: '$98.2B', percentage: 14.3 },
-      { product: 'Vehicles', value: '$87.5B', percentage: 12.8 },
-      { product: 'Electronics', value: '$79.1B', percentage: 11.6 }
-    ];
-    tradeData.exports = [
-      { product: 'Automobiles', value: '$129.7B', percentage: 17.2 },
-      { product: 'Machinery', value: '$118.5B', percentage: 15.7 },
-      { product: 'Pharmaceuticals', value: '$84.3B', percentage: 11.2 }
-    ];
-  } else if (countryName === 'United States') {
-    tradeData.imports = [
-      { product: 'Consumer Goods', value: '$654.1B', percentage: 22.8 },
-      { product: 'Vehicles', value: '$376.5B', percentage: 13.1 },
-      { product: 'Electronics', value: '$347.2B', percentage: 12.1 }
-    ];
-    tradeData.exports = [
-      { product: 'Capital Goods', value: '$519.3B', percentage: 34.1 },
-      { product: 'Consumer Goods', value: '$204.8B', percentage: 13.4 },
-      { product: 'Food & Beverages', value: '$137.2B', percentage: 9.0 }
-    ];
-  }
+  // Import/export data from the database or defaults
+  const [tradeData, setTradeData] = useState<{
+    imports: Array<{product: string; value: string; percentage: number}>;
+    exports: Array<{product: string; value: string; percentage: number}>;
+  }>({
+    imports: [],
+    exports: []
+  });
+  
+  // Update trade data when fresh economic data is loaded
+  useEffect(() => {
+    if (freshEconomicData && 
+        typeof freshEconomicData === 'object' && 
+        'mainIndustries' in freshEconomicData && 
+        freshEconomicData.mainIndustries) {
+      
+      console.log('Fresh trade data:', freshEconomicData.mainIndustries);
+      
+      // Extract imports and exports from the fresh data
+      const mainIndustries = freshEconomicData.mainIndustries as any || {};
+      let importsData = mainIndustries.imports || [];
+      let exportsData = mainIndustries.exports || [];
+      
+      // Set default data if none exists
+      if (importsData.length === 0) {
+        importsData = [
+          { product: 'Machinery', value: '$98.2B', percentage: 14.3 },
+          { product: 'Vehicles', value: '$87.5B', percentage: 12.8 },
+          { product: 'Electronics', value: '$79.1B', percentage: 11.6 }
+        ];
+      }
+      
+      if (exportsData.length === 0) {
+        exportsData = [
+          { product: 'Automobiles', value: '$129.7B', percentage: 17.2 },
+          { product: 'Machinery', value: '$118.5B', percentage: 15.7 },
+          { product: 'Pharmaceuticals', value: '$84.3B', percentage: 11.2 }
+        ];
+      }
+      
+      setTradeData({
+        imports: importsData,
+        exports: exportsData
+      });
+    }
+  }, [freshEconomicData]);
 
   // GDP historical data for the chart
   const gdpData = economicData.gdpHistory 

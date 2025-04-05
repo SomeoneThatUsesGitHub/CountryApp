@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import EconomicDataEditor from '@/components/admin/EconomicDataEditor';
+import ImportsExportsEditor from '@/components/admin/ImportsExportsEditor';
 import { 
   Form, 
   FormField, 
@@ -479,11 +480,21 @@ const AdminPage: React.FC = () => {
                 <div className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Economic Data</CardTitle>
-                      <CardDescription>Manage economic data for this country</CardDescription>
+                      <CardTitle>Economic Indicators</CardTitle>
+                      <CardDescription>Manage GDP and other economic indicators for this country</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <EconomicDataEditor countryId={selectedCountry.id} />
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>International Trade</CardTitle>
+                      <CardDescription>Manage imports and exports data for this country</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ImportsExportsEditor countryId={selectedCountry.id} />
                     </CardContent>
                   </Card>
                 </div>
