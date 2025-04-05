@@ -65,16 +65,21 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
     ];
   }
 
-  // GDP historical data for the chart (sample data)
-  const gdpData = [
-    { year: '2018', gdp: economicData.gdp * 0.9 },
-    { year: '2019', gdp: economicData.gdp * 0.93 },
-    { year: '2020', gdp: economicData.gdp * 0.88 }, // COVID decline
-    { year: '2021', gdp: economicData.gdp * 0.94 },
-    { year: '2022', gdp: economicData.gdp * 0.97 },
-    { year: '2023', gdp: economicData.gdp },
-    { year: '2024', gdp: economicData.gdp * 1.02 }, // Projected
-  ];
+  // GDP historical data for the chart
+  const gdpData = economicData.gdpHistory 
+    ? (economicData.gdpHistory as Array<{year: string; gdp: number | null}>)
+        .filter(point => point.gdp !== null) // Filter out null GDP values
+        .sort((a, b) => parseInt(a.year) - parseInt(b.year)) // Sort by year
+    : // Fallback if no data available
+    [
+      { year: '2018', gdp: economicData.gdp * 0.9 },
+      { year: '2019', gdp: economicData.gdp * 0.93 },
+      { year: '2020', gdp: economicData.gdp * 0.88 }, // COVID decline
+      { year: '2021', gdp: economicData.gdp * 0.94 },
+      { year: '2022', gdp: economicData.gdp * 0.97 },
+      { year: '2023', gdp: economicData.gdp },
+      { year: '2024', gdp: economicData.gdp * 1.02 }, // Projected
+    ];
 
   // Extract growth value as a number for determining color
   const growthValue = parseFloat(economicData.gdpGrowth?.replace('%', '') || '0');
@@ -234,7 +239,9 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
             <CardContent className="p-6">
               <CardTitle className="text-xl mb-4 flex items-center">
                 <LineChartIcon className="h-5 w-5 mr-2 text-blue-600" />
-                GDP Evolution (2018-2024)
+                GDP Evolution ({gdpData.length > 0 
+                  ? `${gdpData[0].year}-${gdpData[gdpData.length-1].year}`
+                  : '2018-2024'})
               </CardTitle>
               
               <div className="h-60 sm:h-80 mt-4">
@@ -277,7 +284,10 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">* 2024 values are projected based on current growth trends</p>
+              {/* Only show note about projections if the latest year is the current or future year */}
+              {gdpData.length > 0 && parseInt(gdpData[gdpData.length-1].year) >= new Date().getFullYear() && (
+                <p className="text-xs text-gray-500 mt-2 text-center">* {gdpData[gdpData.length-1].year} values are projected based on current growth trends</p>
+              )}
             </CardContent>
           </Card>
         </motion.div>

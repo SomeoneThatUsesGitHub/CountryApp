@@ -123,7 +123,7 @@ export const economicData = pgTable("economicData", {
   reforms: jsonb("reforms"), // array of economic reforms
   outlook: text("outlook"), // Economic outlook description
   initiatives: jsonb("initiatives"), // array of economic initiatives
-  topCompanies: jsonb("topCompanies"), // array of top companies in the country
+  gdpHistory: jsonb("gdpHistory"), // array of historical GDP data for charting
 });
 
 // Political Party schema
