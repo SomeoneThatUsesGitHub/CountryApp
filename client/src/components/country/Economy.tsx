@@ -2,8 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { EconomicData } from '@shared/schema';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon, ChartBar } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts';
+import { Separator } from '@/components/ui/separator';
 
 interface EconomyProps {
   countryName: string;
@@ -55,6 +56,12 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
         transition={{ duration: 0.5 }}
         className="mb-6"
       >
+        {/* Section Title with Icon */}
+        <div className="flex items-center mb-6">
+          <ChartBar className="h-6 w-6 mr-2 text-blue-600" />
+          <h2 className="text-2xl font-bold">Key Economic Indicators</h2>
+        </div>
+
         {/* Main Indicators */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* GDP Card */}
@@ -170,6 +177,15 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
           </motion.div>
         </div>
 
+        {/* Thick separator between sections */}
+        <Separator className="my-8 h-1 bg-gray-200" />
+
+        {/* GDP Evolution Chart Section Title */}
+        <div className="flex items-center mb-6 mt-8">
+          <LineChartIcon className="h-6 w-6 mr-2 text-blue-600" />
+          <h2 className="text-2xl font-bold">Economic Growth Trends</h2>
+        </div>
+
         {/* GDP Evolution Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -184,11 +200,12 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                 GDP Evolution (2018-2024)
               </CardTitle>
               
-              <div className="h-80 mt-4">
+              <div className="h-60 sm:h-80 mt-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
                     data={gdpData}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                    margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                    className="text-xs sm:text-sm"
                   >
                     <defs>
                       <linearGradient id="colorGdp" x1="0" y1="0" x2="0" y2="1">
@@ -197,10 +214,16 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.3} />
-                    <XAxis dataKey="year" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                    <XAxis 
+                      dataKey="year" 
+                      tick={{ fill: '#6b7280', fontSize: 10 }}
+                      tickMargin={5}
+                      padding={{ left: 10, right: 10 }}
+                    />
                     <YAxis 
                       tickFormatter={(value) => `$${(value / 1000).toFixed(1)}T`}
-                      tick={{ fill: '#6b7280', fontSize: 12 }}
+                      tick={{ fill: '#6b7280', fontSize: 10 }}
+                      width={60}
                     />
                     <Tooltip 
                       formatter={(value) => [`$${(Number(value)).toLocaleString()} billion`, 'GDP']}
