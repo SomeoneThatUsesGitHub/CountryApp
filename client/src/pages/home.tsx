@@ -9,6 +9,7 @@ import { Globe, Search, MapPin, FileText, Coffee } from 'lucide-react';
 
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
 
   // Fetch all countries
   const { data: countries, isLoading, error } = useQuery<Country[]>({
@@ -18,20 +19,39 @@ const HomePage: React.FC = () => {
   // Group countries by region (continent)
   const groupedCountries = countries ? groupCountriesByRegion(countries) : {};
   
-  // Filter countries by search query if provided
+  // Filter countries by search query and selected continent
   const filteredGroupedCountries = Object.entries(groupedCountries).reduce((acc, [region, countries]) => {
-    if (!searchQuery) return groupedCountries;
+    // If continent is selected and doesn't match current region, skip
+    if (selectedContinent && selectedContinent !== region) {
+      return acc;
+    }
     
-    const filteredCountries = countries.filter(country => 
-      country.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    
-    if (filteredCountries.length > 0) {
-      acc[region] = filteredCountries;
+    // Apply search query filter if provided
+    if (searchQuery) {
+      const filteredCountries = countries.filter(country => 
+        country.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      if (filteredCountries.length > 0) {
+        acc[region] = filteredCountries;
+      }
+    } else {
+      acc[region] = countries;
     }
     
     return acc;
   }, {} as Record<string, Country[]>);
+  
+  // Handle continent filter click
+  const handleContinentClick = (continent: string) => {
+    // If same continent clicked again, clear filter
+    if (selectedContinent === continent) {
+      setSelectedContinent(null);
+    } else {
+      setSelectedContinent(continent);
+      setSearchQuery(''); // Clear search when selecting continent
+    }
+  };
 
   // Continent icons for hero section
   const continentIcons = [
@@ -123,12 +143,18 @@ const HomePage: React.FC = () => {
                   whileHover={{ y: -5, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="cursor-pointer"
+                  onClick={() => handleContinentClick(continent.name)}
                 >
-                  <div className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors`}>
+                  <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${selectedContinent === continent.name ? 'bg-white/30' : 'bg-white/10'} backdrop-blur-sm hover:bg-white/20 transition-colors`}>
                     <span className={`w-6 h-6 rounded-full flex items-center justify-center ${continent.color} text-white`}>
                       {continent.icon}
                     </span>
                     <span className="text-white font-medium">{continent.name}</span>
+                    {selectedContinent === continent.name && (
+                      <span className="ml-1 bg-white/30 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                        ✓
+                      </span>
+                    )}
                   </div>
                 </motion.div>
               ))}

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Country } from '@/types';
 import CountryCard from './CountryCard';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ContinentSectionProps {
   continent: string;
@@ -20,8 +21,10 @@ const continentColors: Record<string, string> = {
 };
 
 const ContinentSection: React.FC<ContinentSectionProps> = ({ continent, countries }) => {
-  // Take the first 4 countries for display
-  const displayCountries = countries.slice(0, 4);
+  const [showAll, setShowAll] = useState(false);
+  
+  // Take the first N countries for display or all if showAll is true
+  const displayCountries = showAll ? countries : countries.slice(0, 4);
   
   // Get the color for this continent (or default)
   const continentColor = continentColors[continent] || 'bg-primary';
@@ -46,6 +49,11 @@ const ContinentSection: React.FC<ContinentSectionProps> = ({ continent, countrie
       transition: { duration: 0.4 }
     }
   };
+  
+  // Toggle showing all countries
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+  };
 
   return (
     <section className="mb-16">
@@ -61,26 +69,65 @@ const ContinentSection: React.FC<ContinentSectionProps> = ({ continent, countrie
         <h3 className="text-2xl font-bold text-gray-800">{continent}</h3>
         <div className={`h-0.5 flex-grow ${continentColor.replace('bg-', 'bg-')} opacity-20`}></div>
         <motion.button 
-          className={`${continentTextColor} font-medium px-3 py-1 rounded-lg border border-current hover:bg-opacity-10 hover:bg-current transition-colors`}
+          className={`${continentTextColor} font-medium px-3 py-1 rounded-lg border border-current hover:bg-opacity-10 hover:bg-current transition-colors flex items-center gap-1`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={toggleShowAll}
         >
-          View All
+          {showAll ? (
+            <>
+              <span>Show Less</span>
+              <ChevronUp className="w-4 h-4" />
+            </>
+          ) : (
+            <>
+              <span>View All</span>
+              <ChevronDown className="w-4 h-4" />
+            </>
+          )}
         </motion.button>
       </motion.div>
       
-      <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {displayCountries.map((country) => (
-          <motion.div key={country.id} variants={itemVariants}>
-            <CountryCard country={country} accentColor={continentColor} />
-          </motion.div>
-        ))}
-      </motion.div>
+      <AnimatePresence>
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          key={`${continent}-${showAll}`}
+        >
+          {displayCountries.map((country) => (
+            <motion.div 
+              key={country.id} 
+              variants={itemVariants}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              layout
+            >
+              <CountryCard country={country} accentColor={continentColor} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Show "Load More" button if there are more countries to display */}
+      {!showAll && countries.length > 4 && (
+        <motion.div 
+          className="mt-8 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <button 
+            className={`text-sm ${continentTextColor} font-medium flex items-center gap-1 mx-auto hover:underline`}
+            onClick={toggleShowAll}
+          >
+            <span>Load {countries.length - 4} more countries</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+        </motion.div>
+      )}
     </section>
   );
 };
