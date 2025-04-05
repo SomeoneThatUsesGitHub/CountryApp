@@ -141,7 +141,17 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
         </motion.div>
       </div>
       
+      {/* Political Parties */}
+      <div className="mb-8">
+        <h3 className="text-2xl font-bold mb-4">Political Parties</h3>
+        {/* This content is loaded from the server */}
+      </div>
+      
+      {/* Divider between Political Parties and International Relations */}
+      <div className="border-t-2 border-gray-200 mb-8 pt-2"></div>
+      
       {/* International Relations Section */}
+      <h3 className="text-2xl font-bold mb-4">International Relations</h3>
       <InternationalRelations countryName={countryName} countryId={countryId} />
       
       {/* Recent Laws Section */}

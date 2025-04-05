@@ -294,7 +294,7 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
 
   return (
     <div className="mb-12">
-      <h3 className="text-xl font-bold mb-6">International Relations</h3>
+      {/* Title removed since it's now in the parent component */}
       
       {/* Key Partners List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -374,6 +374,9 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
         )}
       </div>
 
+      {/* Divider between International Relations and Freedom Indicator */}
+      <div className="border-t-2 border-gray-200 mb-8 pt-2"></div>
+
       {/* Freedom Indicator Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -381,7 +384,7 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h3 className="text-xl font-bold mb-4">Freedom Indicator</h3>
+        <h3 className="text-2xl font-bold mb-4">Freedom Indicator</h3>
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 sm:p-4 border-b">
@@ -464,6 +467,9 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
         </Card>
       </motion.div>
       
+      {/* Divider between Freedom Indicator and Ongoing Conflicts */}
+      <div className="border-t-2 border-gray-200 mb-8 pt-2"></div>
+      
       {/* Ongoing Conflicts Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -471,7 +477,7 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
         transition={{ duration: 0.5, delay: 0.1 }}
         className="mb-8"
       >
-        <h3 className="text-xl font-bold mb-4">Ongoing Conflicts</h3>
+        <h3 className="text-2xl font-bold mb-4">Ongoing Conflicts</h3>
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="bg-gradient-to-r from-red-50 to-amber-50 p-3 sm:p-4 border-b">
