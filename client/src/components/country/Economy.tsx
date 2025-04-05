@@ -24,24 +24,9 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
     );
   }
 
-  // Get the companies directly - no need to parse as the API returns JSON already
-  let companies = [];
-  
-  // Safely check and assign companies
-  if (economicData.topCompanies) {
-    // If it's already an array, use it directly
-    if (Array.isArray(economicData.topCompanies)) {
-      companies = economicData.topCompanies;
-    } 
-    // If it's a string (unlikely), try to parse it
-    else if (typeof economicData.topCompanies === 'string') {
-      try {
-        companies = JSON.parse(economicData.topCompanies);
-      } catch (e) {
-        console.error("Failed to parse companies data:", e);
-      }
-    }
-  }
+  // Directly use the companies from the API
+  // Force it into an array to ensure map works
+  const companies = (economicData.topCompanies || []);
 
   // Extract growth value as a number for determining color
   const growthValue = parseFloat(economicData.gdpGrowth?.replace('%', '') || '0');
@@ -179,6 +164,9 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
 
 
         {/* Top Companies Section */}
+        {console.log("Debug - Companies:", companies)}
+        {console.log("Debug - Companies is Array:", Array.isArray(companies))}
+        {console.log("Debug - Companies length:", companies?.length)}
         {companies && Array.isArray(companies) && companies.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
