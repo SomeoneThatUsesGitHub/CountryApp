@@ -75,10 +75,15 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
   // Update form when economic data is loaded
   useEffect(() => {
     if (economicData) {
+      console.log('Economic data loaded:', economicData);
+      console.log('GDP History data:', economicData.gdpHistory);
+      
       // Initialize GDP history from existing data or create default entries
       let gdpHistoryData = economicData.gdpHistory ? 
-        (economicData.gdpHistory as Array<{year: string; gdp: number | null}>) : 
+        (Array.isArray(economicData.gdpHistory) ? economicData.gdpHistory : []) : 
         [];
+      
+      console.log('Parsed GDP History data:', gdpHistoryData);
         
       // If no history exists, create default entries based on current GDP value
       if (gdpHistoryData.length === 0 && economicData.gdp) {
@@ -92,6 +97,8 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
             gdp: Math.round(economicData.gdp! * factor)
           };
         });
+        
+        console.log('Created default GDP history:', gdpHistoryData);
       }
       
       setGdpHistory(gdpHistoryData);
@@ -188,9 +195,19 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
   const updateGdpHistory = async () => {
     try {
       if (economicData?.id) {
+        console.log('Updating GDP history with data:', gdpHistory);
+        
+        // Make sure all GDP values are numbers, not strings
+        const formattedGdpHistory = gdpHistory.map(entry => ({
+          year: entry.year,
+          gdp: typeof entry.gdp === 'string' ? parseFloat(entry.gdp) : entry.gdp
+        }));
+        
+        console.log('Formatted GDP history for update:', formattedGdpHistory);
+        
         // Update only the GDP history data
         await apiRequest('PATCH', `/api/countries/${countryId}/economy/${economicData.id}`, {
-          gdpHistory,
+          gdpHistory: formattedGdpHistory,
           countryId,
         });
         
@@ -215,6 +232,8 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
   // Handle form submission for all data
   const onSubmit = async (data: EconomicDataFormValues) => {
     try {
+      console.log('Form submission with data:', data);
+      
       // Format growth and inflation if they don't already have % symbol
       if (data.gdpGrowth && !data.gdpGrowth.includes('%')) {
         data.gdpGrowth = `${data.gdpGrowth}%`;
@@ -224,12 +243,26 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
         data.inflation = `${data.inflation}%`;
       }
       
+      // Format GDP history data to ensure numbers
+      const formattedGdpHistory = data.gdpHistory?.map(entry => ({
+        year: entry.year,
+        gdp: typeof entry.gdp === 'string' ? parseFloat(entry.gdp) : entry.gdp
+      })) || [];
+      
+      console.log('Formatted GDP history:', formattedGdpHistory);
+      
+      // Prepare the request payload
+      const payload = {
+        ...data,
+        gdpHistory: formattedGdpHistory,
+        countryId,
+      };
+      
+      console.log('Sending payload:', payload);
+      
       if (economicData?.id) {
         // Update existing economic data
-        await apiRequest('PATCH', `/api/countries/${countryId}/economy/${economicData.id}`, {
-          ...data,
-          countryId,
-        });
+        await apiRequest('PATCH', `/api/countries/${countryId}/economy/${economicData.id}`, payload);
         
         toast({
           title: 'Economic Data Updated',
@@ -237,10 +270,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
         });
       } else {
         // Create new economic data
-        await apiRequest('POST', `/api/countries/${countryId}/economy`, {
-          ...data,
-          countryId,
-        });
+        await apiRequest('POST', `/api/countries/${countryId}/economy`, payload);
         
         toast({
           title: 'Economic Data Added',
