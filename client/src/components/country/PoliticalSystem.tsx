@@ -148,7 +148,7 @@ const PoliticalSystem: React.FC<PoliticalSystemProps> = ({ countryName, countryI
       </div>
       
       {/* Divider between Political Parties and International Relations */}
-      <div className="border-t-2 border-gray-200 mb-8 pt-2"></div>
+      <div className="border-t-4 border-gray-300 mb-10 pt-3 w-full"></div>
       
       {/* International Relations Section */}
       <InternationalRelations countryName={countryName} countryId={countryId} />

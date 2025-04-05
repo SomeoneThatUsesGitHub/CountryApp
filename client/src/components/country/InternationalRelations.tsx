@@ -375,7 +375,7 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
       </div>
 
       {/* Divider between International Relations and Freedom Indicator */}
-      <div className="border-t-2 border-gray-200 mb-8 pt-2"></div>
+      <div className="border-t-4 border-gray-300 mb-10 pt-3 w-full"></div>
 
       {/* Freedom Indicator Section */}
       <motion.div
@@ -468,7 +468,7 @@ const InternationalRelations: React.FC<InternationalRelationsProps> = ({
       </motion.div>
       
       {/* Divider between Freedom Indicator and Ongoing Conflicts */}
-      <div className="border-t-2 border-gray-200 mb-8 pt-2"></div>
+      <div className="border-t-4 border-gray-300 mb-10 pt-3 w-full"></div>
       
       {/* Ongoing Conflicts Section */}
       <motion.div
