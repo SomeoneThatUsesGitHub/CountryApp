@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 // Schema for the trading partners form
 const tradingPartnerSchema = z.object({
   country: z.string().min(1, "Country name is required"),
+  isoCode: z.string().min(2, "ISO code is required").max(2, "Only 2-letter ISO code is allowed"),
   relationship: z.string().optional(),
   tradeVolume: z.string().min(1, "Trade volume is required"),
 });
@@ -77,14 +78,22 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
   // Update form when economic data is loaded
   useEffect(() => {
     if (economicData) {
+      console.log('Loading economic data into form:', economicData);
+      
       // Handle trading partners data
       let tradingPartners: Array<{
         country: string;
+        isoCode?: string;
         relationship?: string;
         tradeVolume: string;
       }> = [];
+      
       if (economicData.tradingPartners && Array.isArray(economicData.tradingPartners)) {
-        tradingPartners = economicData.tradingPartners;
+        // Ensure all trading partners have an isoCode field (even if empty)
+        tradingPartners = economicData.tradingPartners.map(partner => ({
+          ...partner,
+          isoCode: partner.isoCode || ''
+        }));
       }
 
       // Handle industry specializations data
@@ -93,9 +102,12 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
         description?: string;
         contribution: string;
       }> = [];
+      
       if (economicData.industrySpecializations && Array.isArray(economicData.industrySpecializations)) {
         industrySpecializations = economicData.industrySpecializations;
       }
+
+      console.log('Setting form values:', { tradingPartners, industrySpecializations });
 
       // Reset form with the fetched data
       form.reset({
@@ -167,7 +179,7 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
                 <div className="space-y-4">
                   {tradingPartnersArray.fields.map((field, index) => (
                     <div key={field.id} className="flex items-start space-x-2">
-                      <div className="grid grid-cols-3 gap-4 flex-1">
+                      <div className="grid grid-cols-4 gap-4 flex-1">
                         <FormField
                           control={form.control}
                           name={`tradingPartners.${index}.country`}
@@ -176,6 +188,19 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
                               <FormLabel>Country</FormLabel>
                               <FormControl>
                                 <Input {...field} placeholder="e.g., United States" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`tradingPartners.${index}.isoCode`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>ISO Code</FormLabel>
+                              <FormControl>
+                                <Input {...field} placeholder="e.g., US" maxLength={2} style={{ textTransform: 'uppercase' }} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -237,7 +262,7 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
                     type="button"
                     variant="outline"
                     className="w-full"
-                    onClick={() => tradingPartnersArray.append({ country: '', relationship: '', tradeVolume: '' })}
+                    onClick={() => tradingPartnersArray.append({ country: '', isoCode: '', relationship: '', tradeVolume: '' })}
                   >
                     <Plus className="h-4 w-4 mr-2" /> Add Trading Partner
                   </Button>

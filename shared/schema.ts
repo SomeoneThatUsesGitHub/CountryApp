@@ -196,6 +196,7 @@ export type EconomicData = typeof economicData.$inferSelect & {
   }>;
   tradingPartners?: Array<{
     country: string;
+    isoCode?: string;
     relationship?: string;
     tradeVolume: string;
   }>;

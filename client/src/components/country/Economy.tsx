@@ -65,6 +65,12 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
   
   // Update trade data when fresh economic data is loaded
   useEffect(() => {
+    if (freshEconomicData) {
+      console.log('Fresh economic data:', freshEconomicData);
+      console.log('tradingPartners:', freshEconomicData.tradingPartners);
+      console.log('industrySpecializations:', freshEconomicData.industrySpecializations);
+    }
+
     if (freshEconomicData && 
         typeof freshEconomicData === 'object' && 
         'mainIndustries' in freshEconomicData && 
@@ -448,7 +454,18 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                     {freshEconomicData.tradingPartners.map((partner, index) => (
                       <div key={index} className="flex justify-between items-center">
                         <div className="flex items-center">
-                          <div className="w-1.5 h-8 bg-purple-500 rounded-full mr-3"></div>
+                          {partner.isoCode ? (
+                            <div className="mr-3 flex-shrink-0">
+                              <img 
+                                src={`https://flagcdn.com/w40/${partner.isoCode.toLowerCase()}.png`} 
+                                width="30" 
+                                alt={`${partner.country} flag`}
+                                className="rounded border border-gray-200 h-8 w-12 object-cover shadow-sm"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-1.5 h-8 bg-purple-500 rounded-full mr-3"></div>
+                          )}
                           <div>
                             <p className="font-medium">{partner.country}</p>
                             <p className="text-sm text-gray-500">{partner.relationship}</p>
@@ -486,7 +503,10 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                     }, index: number) => (
                       <div key={index} className="flex justify-between items-center">
                         <div className="flex items-center">
-                          <div className="w-1.5 h-8 bg-cyan-500 rounded-full mr-3"></div>
+                          <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0 mr-3">
+                            {/* Use a single icon for all industry types for now */}
+                            <Briefcase className="h-5 w-5 text-cyan-600" />
+                          </div>
                           <div>
                             <p className="font-medium">{industry.name}</p>
                             <p className="text-sm text-gray-500">{industry.description}</p>
