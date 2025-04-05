@@ -1067,7 +1067,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Economic data not found for this country" });
       }
       
-      // Process the request body to ensure gdpHistory data is properly formatted
+      // Process the request body to ensure data is properly formatted
       let processedBody = { ...req.body };
       
       if (processedBody.gdpHistory && Array.isArray(processedBody.gdpHistory)) {
@@ -1078,6 +1078,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }));
         
         console.log('Processed GDP history before update:', processedBody.gdpHistory);
+      }
+
+      // Handle industry specializations - ensure it's valid JSON
+      if (processedBody.industrySpecializations) {
+        console.log('Received industry specializations:', processedBody.industrySpecializations);
+        if (typeof processedBody.industrySpecializations === 'string') {
+          try {
+            processedBody.industrySpecializations = JSON.parse(processedBody.industrySpecializations);
+          } catch (e) {
+            console.error('Failed to parse industry specializations as JSON:', e);
+          }
+        }
+      }
+
+      // Handle trading partners - ensure it's valid JSON
+      if (processedBody.tradingPartners) {
+        console.log('Received trading partners:', processedBody.tradingPartners);
+        if (typeof processedBody.tradingPartners === 'string') {
+          try {
+            processedBody.tradingPartners = JSON.parse(processedBody.tradingPartners);
+          } catch (e) {
+            console.error('Failed to parse trading partners as JSON:', e);
+          }
+        }
       }
       
       const updatedData = await storage.updateEconomicData(id, processedBody);

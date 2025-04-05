@@ -266,6 +266,38 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
                   >
                     <Plus className="h-4 w-4 mr-2" /> Add Trading Partner
                   </Button>
+                  
+                  {/* Add some default trading partners if none exist */}
+                  {tradingPartnersArray.fields.length === 0 && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="w-full mt-4"
+                      onClick={() => {
+                        // Add some sample trading partners
+                        tradingPartnersArray.append({ 
+                          country: 'United States', 
+                          isoCode: 'US', 
+                          relationship: 'Strategic Partner', 
+                          tradeVolume: '193.5' 
+                        });
+                        tradingPartnersArray.append({ 
+                          country: 'China', 
+                          isoCode: 'CN', 
+                          relationship: 'Main Import Source', 
+                          tradeVolume: '168.2' 
+                        });
+                        tradingPartnersArray.append({ 
+                          country: 'France', 
+                          isoCode: 'FR', 
+                          relationship: 'Free Trade Agreement', 
+                          tradeVolume: '147.9' 
+                        });
+                      }}
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> Add Sample Partners
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -344,6 +376,35 @@ const TradingPartnersEditor: React.FC<TradingPartnersEditorProps> = ({ countryId
                   >
                     <Plus className="h-4 w-4 mr-2" /> Add Industry Specialization
                   </Button>
+                  
+                  {/* Add some default industry specializations if none exist */}
+                  {industrySpecializationsArray.fields.length === 0 && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="w-full mt-4"
+                      onClick={() => {
+                        // Add some sample industry specializations
+                        industrySpecializationsArray.append({ 
+                          name: 'Automotive', 
+                          description: 'Vehicle manufacturing and components', 
+                          contribution: '12.8' 
+                        });
+                        industrySpecializationsArray.append({ 
+                          name: 'Technology', 
+                          description: 'Software and hardware development', 
+                          contribution: '10.5' 
+                        });
+                        industrySpecializationsArray.append({ 
+                          name: 'Finance', 
+                          description: 'Banking and insurance services', 
+                          contribution: '8.6' 
+                        });
+                      }}
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> Add Sample Industries
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
