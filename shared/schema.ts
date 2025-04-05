@@ -188,7 +188,18 @@ export type InsertStatistic = z.infer<typeof insertStatisticSchema>;
 export type Statistic = typeof statistics.$inferSelect;
 
 export type InsertEconomicData = z.infer<typeof insertEconomicDataSchema>;
-export type EconomicData = typeof economicData.$inferSelect;
+export type EconomicData = typeof economicData.$inferSelect & {
+  industrySpecializations?: Array<{
+    name: string;
+    description?: string;
+    contribution: string;
+  }>;
+  tradingPartners?: Array<{
+    country: string;
+    relationship?: string;
+    tradeVolume: string;
+  }>;
+};
 
 export type InsertPoliticalParty = z.infer<typeof insertPoliticalPartySchema>;
 export type PoliticalParty = typeof politicalParties.$inferSelect;

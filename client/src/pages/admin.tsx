@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import EconomicDataEditor from '@/components/admin/EconomicDataEditor';
 import ImportsExportsEditor from '@/components/admin/ImportsExportsEditor';
+import TradingPartnersEditor from '@/components/admin/TradingPartnersEditor';
 import { 
   Form, 
   FormField, 
@@ -495,6 +496,16 @@ const AdminPage: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <ImportsExportsEditor countryId={selectedCountry.id} />
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Trading Partners & Industry Specializations</CardTitle>
+                      <CardDescription>Manage trading partners and industry specializations for this country</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <TradingPartnersEditor countryId={selectedCountry.id} />
                     </CardContent>
                   </Card>
                 </div>

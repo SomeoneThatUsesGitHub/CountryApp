@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { EconomicData } from '@shared/schema';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon, ChartBar, ArrowDownToLine as Import, ArrowUpFromLine as Export } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, LineChart as LineChartIcon, ChartBar, ArrowDownToLine as Import, ArrowUpFromLine as Export, Globe, Briefcase } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts';
 import { Separator } from '@/components/ui/separator';
 import { useQuery } from '@tanstack/react-query';
@@ -414,6 +414,96 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                     </div>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+          </div>
+        </motion.div>
+        
+        {/* Thick separator between sections */}
+        <Separator className="my-8 h-1 bg-gray-200" />
+        
+        {/* Trading Partners and Industry Specializations Section Title */}
+        <div className="mb-6 mt-8">
+          <h2 className="text-2xl font-bold">Trading Partners & Industry Specializations</h2>
+        </div>
+        
+        {/* Trading Partners and Industry Specializations Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="mt-6"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Trading Partners Card */}
+            <Card>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Globe className="h-5 w-5 mr-2 text-purple-600" />
+                  Major Trading Partners
+                </CardTitle>
+                
+                {freshEconomicData?.tradingPartners && Array.isArray(freshEconomicData.tradingPartners) && freshEconomicData.tradingPartners.length > 0 ? (
+                  <div className="space-y-4">
+                    {freshEconomicData.tradingPartners.map((partner, index) => (
+                      <div key={index} className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <div className="w-1.5 h-8 bg-purple-500 rounded-full mr-3"></div>
+                          <div>
+                            <p className="font-medium">{partner.country}</p>
+                            <p className="text-sm text-gray-500">{partner.relationship}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-purple-600">${partner.tradeVolume}B</p>
+                          <p className="text-xs text-gray-500">annual trade volume</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>No trading partners data available</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            
+            {/* Industry Specializations Card */}
+            <Card>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Briefcase className="h-5 w-5 mr-2 text-cyan-600" />
+                  Industry Specializations
+                </CardTitle>
+                
+                {freshEconomicData?.industrySpecializations && Array.isArray(freshEconomicData.industrySpecializations) && freshEconomicData.industrySpecializations.length > 0 ? (
+                  <div className="space-y-4">
+                    {freshEconomicData.industrySpecializations.map((industry: {
+                      name: string;
+                      description?: string;
+                      contribution: string;
+                    }, index: number) => (
+                      <div key={index} className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <div className="w-1.5 h-8 bg-cyan-500 rounded-full mr-3"></div>
+                          <div>
+                            <p className="font-medium">{industry.name}</p>
+                            <p className="text-sm text-gray-500">{industry.description}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-cyan-600">{industry.contribution}%</p>
+                          <p className="text-xs text-gray-500">of GDP</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>No industry specializations data available</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
