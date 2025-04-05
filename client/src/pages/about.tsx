@@ -418,30 +418,153 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
       
-      {/* Call to Action */}
-      <section className="py-16 px-4 bg-white text-center">
-        <div className="container mx-auto max-w-3xl">
+      {/* Random Political Facts Section */}
+      <section className="py-12 md:py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
+            className="text-center mb-8 md:mb-10"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Ready to Explore the World?
+              <span className="text-primary">Fascinating</span> Political Facts
             </h2>
-            <p className="text-lg text-gray-700 mb-8">
-              Start your journey through global politics and discover fascinating facts about countries around the world.
+            <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
+              Discover intriguing facts about global politics and governance systems
             </p>
+          </motion.div>
+          
+          {/* Political Facts Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {[
+              {
+                title: "World's Oldest Democracy",
+                fact: "San Marino, founded in 301 CE, claims to be the world's oldest constitutional republic with a constitution dating back to 1600.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                    <circle cx="12" cy="5" r="2"></circle>
+                    <path d="M12 7v4"></path>
+                    <line x1="8" y1="16" x2="8" y2="16"></line>
+                    <line x1="16" y1="16" x2="16" y2="16"></line>
+                  </svg>
+                ),
+                color: "bg-blue-500"
+              },
+              {
+                title: "Women in Parliament",
+                fact: "Rwanda has the highest percentage of women in parliament globally, with over 60% of seats in its lower house held by women.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                ),
+                color: "bg-pink-500"
+              },
+              {
+                title: "Unique Electoral Systems",
+                fact: "Bolivia's election process includes an unusual system that allows voters to choose 'None of the Above' as a legitimate election option.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 7.5h20v9H2z"></path>
+                    <path d="M5 7.5V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3.5"></path>
+                    <path d="M4 12h.01"></path>
+                    <rect x="6" y="10" width="12" height="4" rx="1"></rect>
+                  </svg>
+                ),
+                color: "bg-green-500"
+              },
+              {
+                title: "Youngest Head of State",
+                fact: "In 2023, Gabriel Boric of Chile became one of the world's youngest elected heads of state at age 35, representing a new generation of leadership.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M21 15l-3-3-3 3"></path>
+                    <path d="M18 12v6"></path>
+                  </svg>
+                ),
+                color: "bg-purple-500"
+              },
+              {
+                title: "Longest Constitutions",
+                fact: "India has the world's longest written constitution with originally 395 articles, while the U.S. Constitution remains one of the shortest with just 7 articles.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                  </svg>
+                ),
+                color: "bg-amber-500"
+              },
+              {
+                title: "Unique Government Forms",
+                fact: "Vatican City is the world's only absolute monarchy in Europe where the Pope is elected by cardinals and serves as both head of state and head of the Church.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="8" r="6"></circle>
+                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                  </svg>
+                ),
+                color: "bg-red-500"
+              }
+            ].map((fact, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="relative overflow-hidden rounded-xl shadow-md bg-white hover:shadow-lg transition-all duration-300 flex flex-col"
+              >
+                <div className={`h-2 ${fact.color}`}></div>
+                <div className="p-5 md:p-6 flex-grow">
+                  <div className="flex items-center mb-3 gap-3">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                      fact.color === "bg-blue-500" ? "bg-blue-100 text-blue-500" :
+                      fact.color === "bg-pink-500" ? "bg-pink-100 text-pink-500" :
+                      fact.color === "bg-green-500" ? "bg-green-100 text-green-500" :
+                      fact.color === "bg-purple-500" ? "bg-purple-100 text-purple-500" :
+                      fact.color === "bg-amber-500" ? "bg-amber-100 text-amber-500" :
+                      fact.color === "bg-red-500" ? "bg-red-100 text-red-500" :
+                      "bg-gray-100 text-gray-500"
+                    }`}>
+                      {fact.icon}
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800">{fact.title}</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm md:text-base">{fact.fact}</p>
+                </div>
+                
+                <motion.div 
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  whileHover={{ rotate: 15 }}
+                >
+                  <div className="w-20 h-20 text-gray-100 opacity-10 -rotate-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-full w-full" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9.5 3v4.5H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9.5a2 2 0 0 0-2-2H19V3h-2v4.5h-5.5V3h-2z"></path>
+                    </svg>
+                  </div>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-10 md:mt-12">
             <motion.a
               href="/"
-              className="inline-block py-3 px-8 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-bold text-lg"
+              className="inline-block py-3 px-6 md:px-8 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-bold text-base md:text-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Begin Your Adventure
+              Explore More Facts
             </motion.a>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
