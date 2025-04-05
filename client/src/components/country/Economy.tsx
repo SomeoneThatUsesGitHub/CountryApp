@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { EconomicData } from '@shared/schema';
-import { Card, CardContent } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart } from 'lucide-react';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { TrendingUp, TrendingDown, DollarSign, Landmark, BarChart, Building2, Factory, Briefcase } from 'lucide-react';
 
 interface EconomyProps {
   countryName: string;
@@ -159,6 +159,54 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
         </div>
 
 
+        {/* Top Companies Section */}
+        {economicData.topCompanies && (economicData.topCompanies as any[]).length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-8"
+          >
+            <Card>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Building2 className="h-5 w-5 mr-2 text-blue-600" />
+                  Top Companies
+                </CardTitle>
+                
+                <div className="space-y-4">
+                  {(economicData.topCompanies as Array<{name: string; industry: string; revenue: string}>).map((company, index) => (
+                    <div key={index} className="flex items-center p-3 rounded-md bg-gray-50 border">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 ${
+                        index === 0 ? 'bg-amber-100' : 
+                        index === 1 ? 'bg-gray-200' : 
+                        'bg-amber-50'
+                      }`}>
+                        {index === 0 ? (
+                          <Building2 className="h-5 w-5 text-amber-600" />
+                        ) : index === 1 ? (
+                          <Factory className="h-5 w-5 text-gray-600" />
+                        ) : (
+                          <Briefcase className="h-5 w-5 text-amber-500" />
+                        )}
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h4 className="font-semibold">{company.name}</h4>
+                        <div className="flex justify-between mt-1">
+                          <span className="text-sm text-gray-500">{company.industry}</span>
+                          {company.revenue && (
+                            <span className="text-sm font-medium">{company.revenue}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );

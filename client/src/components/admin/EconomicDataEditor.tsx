@@ -17,6 +17,14 @@ import { useToast } from '@/hooks/use-toast';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { EconomicData } from '@shared/schema';
+import { Trash } from 'lucide-react';
+
+// Company schema for the form
+const companySchema = z.object({
+  name: z.string().min(1, "Company name is required"),
+  industry: z.string().optional(),
+  revenue: z.string().optional(),
+});
 
 // Schema for economic data form
 const economicDataSchema = z.object({
@@ -24,6 +32,7 @@ const economicDataSchema = z.object({
   gdpPerCapita: z.coerce.number().min(0, "GDP per capita must be a positive number").optional().nullable(),
   gdpGrowth: z.string().optional().nullable(),
   inflation: z.string().optional().nullable(),
+  topCompanies: z.array(companySchema).optional(),
 });
 
 type EconomicDataFormValues = z.infer<typeof economicDataSchema>;
@@ -53,17 +62,54 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
     },
   });
   
+  // State for managing companies
+  const [companies, setCompanies] = useState<Array<{
+    name: string;
+    industry: string;
+    revenue: string;
+  }>>([]);
+
   // Update form when economic data is loaded
   useEffect(() => {
     if (economicData) {
+      // Initialize companies from existing data or empty array
+      const companyData = economicData.topCompanies ? 
+        (economicData.topCompanies as Array<{name: string; industry: string; revenue: string}>) : 
+        [];
+      
+      setCompanies(companyData);
+      
       form.reset({
         gdp: economicData.gdp || null,
         gdpPerCapita: economicData.gdpPerCapita || null,
         gdpGrowth: economicData.gdpGrowth || null,
         inflation: economicData.inflation || null,
+        topCompanies: companyData,
       });
     }
   }, [economicData, form]);
+  
+  // Handle adding a new company
+  const handleAddCompany = () => {
+    const newCompanies = [...companies, { name: '', industry: '', revenue: '' }];
+    setCompanies(newCompanies);
+    form.setValue('topCompanies', newCompanies);
+  };
+  
+  // Handle removing a company
+  const handleRemoveCompany = (index: number) => {
+    const newCompanies = companies.filter((_, i) => i !== index);
+    setCompanies(newCompanies);
+    form.setValue('topCompanies', newCompanies);
+  };
+  
+  // Handle company field changes
+  const handleCompanyChange = (index: number, field: string, value: string) => {
+    const newCompanies = [...companies];
+    newCompanies[index] = { ...newCompanies[index], [field]: value };
+    setCompanies(newCompanies);
+    form.setValue('topCompanies', newCompanies);
+  };
   
   // Handle form submission
   const onSubmit = async (data: EconomicDataFormValues) => {
@@ -200,6 +246,63 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
               </FormItem>
             )}
           />
+        </div>
+        
+        {/* Top Companies Section */}
+        <div className="border rounded-lg p-4 bg-gray-50 my-6">
+          <h3 className="text-lg font-semibold mb-3">Top Companies</h3>
+          <p className="text-sm text-gray-500 mb-4">Add up to 3 major companies for this country</p>
+          
+          {companies.map((company, index) => (
+            <div key={index} className="grid grid-cols-12 gap-2 mb-3 items-center">
+              <div className="col-span-5">
+                <Input
+                  placeholder="Company Name"
+                  value={company.name}
+                  onChange={(e) => handleCompanyChange(index, 'name', e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="col-span-3">
+                <Input
+                  placeholder="Industry"
+                  value={company.industry}
+                  onChange={(e) => handleCompanyChange(index, 'industry', e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="col-span-3">
+                <Input
+                  placeholder="Revenue (e.g. $50B)"
+                  value={company.revenue}
+                  onChange={(e) => handleCompanyChange(index, 'revenue', e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="col-span-1 flex justify-center">
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => handleRemoveCompany(index)}
+                >
+                  <Trash className="h-4 w-4 text-gray-500" />
+                </Button>
+              </div>
+            </div>
+          ))}
+          
+          {companies.length < 3 && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="sm" 
+              className="mt-2" 
+              onClick={handleAddCompany}
+            >
+              Add Company
+            </Button>
+          )}
         </div>
         
         <div className="flex justify-end">
