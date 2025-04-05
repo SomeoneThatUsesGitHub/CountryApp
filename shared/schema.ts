@@ -119,11 +119,13 @@ export const economicData = pgTable("economicData", {
   inflation: text("inflation"),
   mainIndustries: jsonb("mainIndustries"), // array of industries with percentages
   tradingPartners: jsonb("tradingPartners"), // array of countries
+  industrySpecializations: jsonb("industrySpecializations"), // array of industry specializations
   challenges: jsonb("challenges"), // array of economic challenges
   reforms: jsonb("reforms"), // array of economic reforms
   outlook: text("outlook"), // Economic outlook description
   initiatives: jsonb("initiatives"), // array of economic initiatives
   gdpHistory: jsonb("gdpHistory"), // array of historical GDP data for charting
+  exchangeRate: text("exchangeRate"), // Exchange rate to USD (e.g., "0.92" for EUR)
 });
 
 // Political Party schema

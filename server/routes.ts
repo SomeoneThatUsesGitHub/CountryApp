@@ -1104,6 +1104,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
+      // Handle exchange rate
+      if (processedBody.exchangeRate) {
+        console.log('Received exchange rate:', processedBody.exchangeRate);
+      }
+      
       const updatedData = await storage.updateEconomicData(id, processedBody);
       if (!updatedData) {
         return res.status(500).json({ message: "Failed to update economic data" });

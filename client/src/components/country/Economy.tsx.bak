@@ -366,7 +366,7 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="mt-6"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Imports Card */}
             <Card>
               <CardContent className="p-6">
@@ -374,20 +374,20 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                   <Import className="h-5 w-5 mr-2 text-blue-600" />
                   Main Imports
                 </CardTitle>
+                
                 <div className="space-y-4">
                   {tradeData.imports.map((item, index) => (
                     <div key={index} className="flex justify-between items-center">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-3">
-                          <Import className="h-5 w-5 text-blue-600" />
-                        </div>
+                        <div className="w-1.5 h-8 bg-blue-500 rounded-full mr-3"></div>
                         <div>
                           <p className="font-medium">{item.product}</p>
                           <p className="text-sm text-gray-500">{item.value}</p>
                         </div>
                       </div>
-                      <div className="bg-blue-50 px-3 py-1 rounded-full">
-                        <span className="text-sm font-medium text-blue-700">{item.percentage}%</span>
+                      <div className="text-right">
+                        <p className="font-bold text-blue-600">{item.percentage}%</p>
+                        <p className="text-xs text-gray-500">of total imports</p>
                       </div>
                     </div>
                   ))}
@@ -402,20 +402,20 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
                   <Export className="h-5 w-5 mr-2 text-green-600" />
                   Main Exports
                 </CardTitle>
+                
                 <div className="space-y-4">
                   {tradeData.exports.map((item, index) => (
                     <div key={index} className="flex justify-between items-center">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mr-3">
-                          <Export className="h-5 w-5 text-green-600" />
-                        </div>
+                        <div className="w-1.5 h-8 bg-green-500 rounded-full mr-3"></div>
                         <div>
                           <p className="font-medium">{item.product}</p>
                           <p className="text-sm text-gray-500">{item.value}</p>
                         </div>
                       </div>
-                      <div className="bg-green-50 px-3 py-1 rounded-full">
-                        <span className="text-sm font-medium text-green-700">{item.percentage}%</span>
+                      <div className="text-right">
+                        <p className="font-bold text-green-600">{item.percentage}%</p>
+                        <p className="text-xs text-gray-500">of total exports</p>
                       </div>
                     </div>
                   ))}
@@ -424,101 +424,77 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
             </Card>
           </div>
         </motion.div>
-
+        
         {/* Thick separator between sections */}
         <Separator className="my-8 h-1 bg-gray-200" />
-
-        {/* Trading Partners Section Title */}
+        
+        {/* Trading Partners and Industry Specializations Section Title */}
         <div className="mb-6 mt-8">
-          <h2 className="text-2xl font-bold">Key Trading Partners</h2>
+          <h2 className="text-2xl font-bold">Trading Partners & Industry Specializations</h2>
         </div>
-
-        {/* Trading Partners */}
+        
+        {/* Trading Partners and Industry Specializations Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
           className="mt-6"
         >
-          <Card>
-            <CardContent className="p-6">
-              <CardTitle className="text-xl mb-4 flex items-center">
-                <Globe className="h-5 w-5 mr-2 text-violet-600" />
-                Major Trading Partners
-              </CardTitle>
-              
-              {freshEconomicData && freshEconomicData.tradingPartners && 
-                Array.isArray(freshEconomicData.tradingPartners) && 
-                freshEconomicData.tradingPartners.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {freshEconomicData.tradingPartners.map((partner: any, index: number) => (
-                    <div key={index} className="flex justify-between items-center p-3 border rounded-lg">
-                      <div className="flex items-center">
-                        {partner.isoCode && (
-                          <img 
-                            src={`https://flagcdn.com/${partner.isoCode.toLowerCase()}.svg`} 
-                            alt={`${partner.country} flag`}
-                            className="w-10 h-6 object-cover rounded mr-3"
-                            onError={(e) => {
-                              // If the flag fails to load, show an icon instead
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              const parentEl = target.parentElement;
-                              if (parentEl) {
-                                const iconDiv = document.createElement('div');
-                                iconDiv.className = 'w-10 h-6 bg-gray-200 rounded flex items-center justify-center';
-                                iconDiv.innerHTML = '<span class="text-gray-500 text-xs">N/A</span>';
-                                parentEl.prepend(iconDiv);
-                              }
-                            }}
-                          />
-                        )}
-                        <div>
-                          <p className="font-medium">{partner.country}</p>
-                          <p className="text-xs text-gray-500">{partner.relationship || 'Trading Partner'}</p>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-violet-700">{partner.tradeVolume}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <p>No trading partners data available</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Thick separator between sections */}
-        <Separator className="my-8 h-1 bg-gray-200" />
-
-        {/* Industry Specializations Section Title */}
-        <div className="mb-6 mt-8">
-          <h2 className="text-2xl font-bold">Industry Specializations</h2>
-        </div>
-
-        {/* Industry Specializations */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="mt-6"
-        >
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Trading Partners Card */}
             <Card>
               <CardContent className="p-6">
-                <CardTitle className="text-xl mb-6 flex items-center">
-                  <Briefcase className="h-5 w-5 mr-2 text-cyan-600" />
-                  Key Industries
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Globe className="h-5 w-5 mr-2 text-purple-600" />
+                  Major Trading Partners
                 </CardTitle>
                 
-                {freshEconomicData && freshEconomicData.industrySpecializations && 
-                  Array.isArray(freshEconomicData.industrySpecializations) && 
-                  freshEconomicData.industrySpecializations.length > 0 ? (
+                {freshEconomicData?.tradingPartners && Array.isArray(freshEconomicData.tradingPartners) && freshEconomicData.tradingPartners.length > 0 ? (
+                  <div className="space-y-4">
+                    {freshEconomicData.tradingPartners.map((partner, index) => (
+                      <div key={index} className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          {partner.isoCode ? (
+                            <div className="mr-3 flex-shrink-0">
+                              <img 
+                                src={`https://flagcdn.com/w40/${partner.isoCode.toLowerCase()}.png`} 
+                                width="30" 
+                                alt={`${partner.country} flag`}
+                                className="rounded border border-gray-200 h-8 w-12 object-cover shadow-sm"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-1.5 h-8 bg-purple-500 rounded-full mr-3"></div>
+                          )}
+                          <div>
+                            <p className="font-medium">{partner.country}</p>
+                            <p className="text-sm text-gray-500">{partner.relationship}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-purple-600">${partner.tradeVolume}B</p>
+                          <p className="text-xs text-gray-500">annual trade volume</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>No trading partners data available</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            
+            {/* Industry Specializations Card */}
+            <Card>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-4 flex items-center">
+                  <Briefcase className="h-5 w-5 mr-2 text-cyan-600" />
+                  Industry Specializations
+                </CardTitle>
+                
+                {freshEconomicData?.industrySpecializations && Array.isArray(freshEconomicData.industrySpecializations) && freshEconomicData.industrySpecializations.length > 0 ? (
                   <div className="space-y-4">
                     {freshEconomicData.industrySpecializations.map((industry: {
                       name: string;
@@ -560,7 +536,7 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.9 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
           className="mt-6"
         >
           <div className="mb-6 mt-8">

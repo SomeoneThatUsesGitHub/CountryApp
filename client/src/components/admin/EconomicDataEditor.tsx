@@ -33,6 +33,7 @@ const economicDataSchema = z.object({
   gdpPerCapita: z.coerce.number().min(0, "GDP per capita must be a positive number").optional().nullable(),
   gdpGrowth: z.string().optional().nullable(),
   inflation: z.string().optional().nullable(),
+  exchangeRate: z.string().optional().nullable(),
   gdpHistory: z.array(gdpDataPointSchema).optional(),
 });
 
@@ -60,6 +61,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
       gdpPerCapita: null,
       gdpGrowth: null,
       inflation: null,
+      exchangeRate: null,
     },
   });
   
@@ -108,6 +110,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
         gdpPerCapita: economicData.gdpPerCapita || null,
         gdpGrowth: economicData.gdpGrowth || null,
         inflation: economicData.inflation || null,
+        exchangeRate: economicData.exchangeRate || null,
         gdpHistory: gdpHistoryData,
       });
     }
@@ -155,6 +158,7 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
         gdpPerCapita: formValues.gdpPerCapita,
         gdpGrowth: formValues.gdpGrowth,
         inflation: formValues.inflation,
+        exchangeRate: formValues.exchangeRate,
       };
       
       // Format growth and inflation if they don't already have % symbol
@@ -373,6 +377,25 @@ const EconomicDataEditor: React.FC<EconomicDataEditorProps> = ({ countryId }) =>
                   />
                 </FormControl>
                 <FormDescription>Annual inflation rate (include % symbol)</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="exchangeRate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Exchange Rate (EUR to USD)</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="e.g. 1.08" 
+                    {...field} 
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormDescription>Current exchange rate from Euro to US Dollar</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
