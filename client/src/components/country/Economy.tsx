@@ -24,12 +24,24 @@ const Economy: React.FC<EconomyProps> = ({ countryName, economicData }) => {
     );
   }
 
-  // Parse topCompanies data to ensure it's an array
-  const companies = economicData.topCompanies 
-    ? (typeof economicData.topCompanies === 'string' 
-        ? JSON.parse(economicData.topCompanies as string) 
-        : economicData.topCompanies)
-    : [];
+  // Get the companies directly - no need to parse as the API returns JSON already
+  let companies = [];
+  
+  // Safely check and assign companies
+  if (economicData.topCompanies) {
+    // If it's already an array, use it directly
+    if (Array.isArray(economicData.topCompanies)) {
+      companies = economicData.topCompanies;
+    } 
+    // If it's a string (unlikely), try to parse it
+    else if (typeof economicData.topCompanies === 'string') {
+      try {
+        companies = JSON.parse(economicData.topCompanies);
+      } catch (e) {
+        console.error("Failed to parse companies data:", e);
+      }
+    }
+  }
 
   // Extract growth value as a number for determining color
   const growthValue = parseFloat(economicData.gdpGrowth?.replace('%', '') || '0');
